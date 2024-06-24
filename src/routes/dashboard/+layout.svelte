@@ -113,21 +113,38 @@
 		<CloseButton on:click={() => (drawerHidden = true)} class="mb-4 dark:text-white lg:hidden" />
 	</div>
 	<Sidebar asideClass="w-54 ">
-		<SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
+		<SidebarWrapper divClass="overflow-y-auto py-2 px-2 rounded dark:bg-gray-800">
 			<SidebarGroup>
+				<SidebarItem label="BaaS Platform" class="font-bold">
+					<svelte:fragment slot="icon">
+						<svg
+							class="h-8 w-8 fill-current"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+						>
+							<path
+								d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
+							/>
+						</svg>
+					</svelte:fragment>
+				</SidebarItem>
+			</SidebarGroup>
+
+			<SidebarGroup border>
 				<SidebarItem
 					label="Home"
 					href="/"
 					on:click={toggleSide}
 					active={activeUrl === `/`}
-					class="hover:bg-gray-200"
+					class="font-medium hover:bg-gray-200"
 				>
 					<svelte:fragment slot="icon">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="currentColor"
-							class="size-6 text-gray-700"
+							class="size-5 text-gray-700"
 						>
 							<path
 								d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z"
@@ -146,14 +163,14 @@
 					activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700"
 					on:click={toggleSide}
 					active={activeUrl === `comsthing`}
-					class="hover:bg-gray-200"
+					class="font-medium hover:bg-gray-200"
 				>
 					<svelte fragment slot="icon">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="currentColor"
-							class="size-6 text-gray-700"
+							class="size-5 text-gray-700"
 						>
 							<path
 								d="M21 6.375c0 2.692-4.03 4.875-9 4.875S3 9.067 3 6.375 7.03 1.5 12 1.5s9 2.183 9 4.875Z"
@@ -178,14 +195,14 @@
 					activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700"
 					on:click={toggleSide}
 					active={activeUrl === `comsthing`}
-					class="hover:bg-gray-200"
+					class="font-medium hover:bg-gray-200"
 				>
 					<svelte:fragment slot="icon">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="currentColor"
-							class="size-6 text-gray-700"
+							class="size-5 text-gray-700"
 						>
 							<path
 								fill-rule="evenodd"
@@ -203,14 +220,14 @@
 					activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700"
 					on:click={toggleSide}
 					active={activeUrl === `comsthing`}
-					class="hover:bg-gray-200"
+					class="front-medium font-medium hover:bg-gray-200"
 				>
 					<svelte:fragment slot="icon">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="currentColor"
-							class="size-6 text-gray-700"
+							class="size-5 text-gray-700"
 						>
 							<path
 								d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z"
@@ -218,20 +235,6 @@
 						</svg>
 					</svelte:fragment>
 				</SidebarItem>
-
-				<!---->
-				<!-- <SidebarDropdownWrapper label="Articles"> -->
-				<!-- 	{#each data.articles as { meta, path }} -->
-				<!-- 		<SidebarItem -->
-				<!-- 			label={meta.title} -->
-				<!-- 			href={`/blog/${path}`} -->
-				<!-- 			{spanClass} -->
-				<!-- 			activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700" -->
-				<!-- 			on:click={toggleSide} -->
-				<!-- 			active={activeUrl === `/blog/${path}`} -->
-				<!-- 		/> -->
-				<!-- 	{/each} -->
-				<!-- </SidebarDropdownWrapper> -->
 			</SidebarGroup>
 		</SidebarWrapper>
 	</Sidebar>
