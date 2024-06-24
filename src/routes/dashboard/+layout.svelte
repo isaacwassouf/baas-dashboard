@@ -106,7 +106,7 @@
 	bind:hidden={drawerHidden}
 	bind:activateClickOutside
 	width="w-64"
-	class="overflow-scroll bg-gray-100 pb-32 border-r-2"
+	class="z-30 overflow-scroll border-r-2 bg-gray-100 pb-32"
 	id="sidebar"
 >
 	<div class="flex items-center">
