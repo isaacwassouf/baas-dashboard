@@ -5,3 +5,13 @@ export interface TableDetails {
   tableComment: string;
   createTime: string;
 }
+
+export interface AddColumnDetails {
+  uniqueId: string;
+  columnName: string;
+  columnType: string;
+  columnDefault: string;
+  isPrimary: boolean;
+  isNullable: boolean;
+  isUnique: boolean;
+}

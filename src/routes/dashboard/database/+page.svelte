@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { listTables } from '$lib/api/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
+	import CreateTableModal from '$lib/components/database/create-table-modal.svelte';
 	import type { TableDetails } from '$lib/types/schemas';
 	import {
 		Table,
@@ -20,6 +21,7 @@
 	let tableDetails: TableDetails[] = [];
 	let tableToBeDeleted: TableDetails | null = null;
 	let confirmDeletionModalOpen: boolean = false;
+	let createTableModalOpen: boolean = false;
 
 	const loadTables = async () => {
 		loading = true;
@@ -32,6 +34,10 @@
 		}
 	};
 
+	const openCreateTableModal = () => {
+		createTableModalOpen = true;
+	};
+
 	const markTableForDeletion = (table: TableDetails) => {
 		tableToBeDeleted = table;
 		confirmDeletionModalOpen = true;
@@ -41,6 +47,8 @@
 		await loadTables();
 	});
 </script>
+
+<CreateTableModal bind:open={createTableModalOpen} />
 
 <ConformationModal bind:open={confirmDeletionModalOpen}>
 	<div slot="prompt">
@@ -90,6 +98,7 @@
 		<Button
 			size="sm"
 			class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600"
+			on:click={openCreateTableModal}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
