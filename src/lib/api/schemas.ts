@@ -1,27 +1,46 @@
-// import { API } from "$lib/api"
-import { type TableDetails } from '$lib/types/schemas';
+import { API } from '$lib/api';
+import { type AddTableDetails, type TableDetails, type TableDetailsList } from '$lib/types/schemas';
 
-export const listTables = (): Promise<TableDetails[]> => {
-	const result: TableDetails[] = [
-		{
-			tableName: 'Table1',
-			tableSize: 100,
-			tableCount: 10,
-			tableComment: 'This is a table',
-			createTime: '2021-10-10'
-		},
-		{
-			tableName: 'Table2',
-			tableSize: 200,
-			tableCount: 20,
-			tableComment: 'This is another table',
-			createTime: '2021-10-11'
-		}
-	];
+export const listTables = async (): Promise<TableDetailsList | undefined> => {
+  try {
+    const response = await API.get<TableDetailsList>('/api/schema/tables');
 
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve(result);
-		}, 1000);
-	});
+    if (response.status === 200) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to fetch tables');
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createTable = async (table: AddTableDetails): Promise<void> => {
+  console.log('table', table);
+  try {
+    const response = await API.post('/table', table);
+
+    if (response.status === 200) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject('Failed to create table');
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const dropTable = async (tableName: string): Promise<void> => {
+  try {
+    const response = await API.delete(`/api/schema/tables/${tableName}`);
+
+    if (response.status === 200) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject('Failed to drop table');
+  } catch (error) {
+    console.error(error);
+    Promise.reject('Failed to drop table');
+  }
 };

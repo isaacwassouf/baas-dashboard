@@ -8,9 +8,14 @@
 	export let index: number;
 
 	let countries = [
+		{ value: 'int16', name: 'int16' },
+		{ value: 'uint16', name: 'uint16' },
+		{ value: 'int24', name: 'int24' },
+		{ value: 'uint24', name: 'uint24' },
 		{ value: 'int32', name: 'int32' },
-		{ value: 'ca', name: 'Canada' },
-		{ value: 'fr', name: 'France' }
+		{ value: 'uint32', name: 'uint32' },
+		{ value: 'int64', name: 'int64' },
+		{ value: 'uint64', name: 'uint64' }
 	];
 
 	const removeColumn = () => {
@@ -29,7 +34,7 @@
 			type="text"
 			name="column-name"
 			size="md"
-			placeholder="name"
+			placeholder="column name"
 			required
 			bind:value={columnDetails.columnName}
 			disabled={isSystemColumn}

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { listTables } from '$lib/api/schemas';
+	import { listTables, dropTable } from '$lib/api/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
 	import CreateTableModal from '$lib/components/database/create-table-modal.svelte';
-	import type { TableDetails } from '$lib/types/schemas';
+	import type { TableDetails, TableDetailsList } from '$lib/types/schemas';
 	import {
 		Table,
 		TableBody,
@@ -16,9 +16,10 @@
 		Spinner
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
+	import toast from 'svelte-french-toast';
 
 	let loading: boolean = false;
-	let tableDetails: TableDetails[] = [];
+	let tableDetails: TableDetails[] | undefined = [];
 	let tableToBeDeleted: TableDetails | null = null;
 	let confirmDeletionModalOpen: boolean = false;
 	let createTableModalOpen: boolean = false;
@@ -26,7 +27,8 @@
 	const loadTables = async () => {
 		loading = true;
 		try {
-			tableDetails = await listTables();
+			const result = await listTables();
+			tableDetails = result?.tablesList;
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -46,11 +48,28 @@
 	onMount(async () => {
 		await loadTables();
 	});
+
+	const confirmTableDrop = async () => {
+		try {
+			await dropTable(tableToBeDeleted!.tableName);
+
+			toast.success('Table deleted successfully', {
+				position: 'bottom-right'
+			});
+
+			await loadTables();
+		} catch (error) {
+			console.error(error);
+			toast.error('Failed to delete table', {
+				position: 'bottom-right'
+			});
+		}
+	};
 </script>
 
 <CreateTableModal bind:open={createTableModalOpen} />
 
-<ConformationModal bind:open={confirmDeletionModalOpen}>
+<ConformationModal bind:open={confirmDeletionModalOpen} on:confirm={confirmTableDrop}>
 	<div slot="prompt">
 		<h3 class="mb-5 text-lg font-semibold text-gray-500 dark:text-gray-400">
 			Are you sure that you want to delete this table?

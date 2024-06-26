@@ -4,9 +4,19 @@
 	import { Table, TableBody, TableHead, TableHeadCell } from 'flowbite-svelte';
 	import AddColumnItem from '$lib/components/database/add-column-item.svelte';
 	import { addColumnsStore } from '$lib/stores/add-columns';
+	import type { AddTableDetails } from '$lib/types/schemas';
+	import { createTable } from '$lib/api/schemas';
 
 	export let open = false;
 	export let size: ComponentProps<Modal>['size'] = 'xl';
+
+	let addingTable: boolean = false;
+
+	let addTableDetails: AddTableDetails = {
+		tableName: '',
+		tableComment: '',
+		columns: []
+	};
 
 	const addColumn = () => {
 		addColumnsStore.update((columns) => {
@@ -24,6 +34,22 @@
 			return columns;
 		});
 	};
+
+	const handleSubmit = (event: Event) => {
+		event.preventDefault();
+		addingTable = true;
+		try {
+			createTable({
+				tableName: addTableDetails.tableName,
+				tableComment: addTableDetails.tableComment,
+				columns: $addColumnsStore
+			});
+		} catch (error) {
+			console.error(error);
+		} finally {
+			addingTable = false;
+		}
+	};
 </script>
 
 <Modal bind:open {size} autoclose={false} class="w-full">
@@ -31,16 +57,22 @@
 		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create a new table</h3>
 		<Label class="space-y-2">
 			<span>Table name</span> <span class="text-red-500">*</span>
-			<Input type="text" name="name" placeholder="customers" required />
+			<Input
+				type="text"
+				name="name"
+				placeholder="customers"
+				required
+				bind:value={addTableDetails.tableName}
+			/>
 		</Label>
 
 		<Label class="space-y-2">
 			<span>Table comment</span>
-			<Textarea name="comment" required />
+			<Textarea name="comment" required bind:value={addTableDetails.tableComment} />
 		</Label>
 
 		<Label class="space-y-2">
-			<span>Table columns</span> <span class="text-red-500">*</span> <br />
+			<span class="text-gray-900">Table columns</span> <span class="text-red-500">*</span> <br />
 			<small class="text-gray-500"
 				><Badge color="red">id</Badge>
 				<Badge color="red">created_at</Badge>
@@ -75,6 +107,6 @@
 			>
 		</div>
 
-		<Button type="submit" class="w-full1">Create table</Button>
+		<Button type="submit" class="w-full1" on:click={handleSubmit}>Create table</Button>
 	</form>
 </Modal>
