@@ -1,5 +1,11 @@
 import { API } from '$lib/api';
-import { type AddTableDetails, type TableDetails, type TableDetailsList } from '$lib/types/schemas';
+import {
+  type AddTableDetails,
+  type ColumnDetails,
+  type ColumnDetailsList,
+  type TableDetails,
+  type TableDetailsList
+} from '$lib/types/schemas';
 
 export const listTables = async (): Promise<TableDetailsList | undefined> => {
   try {
@@ -39,6 +45,21 @@ export const dropTable = async (tableName: string): Promise<void> => {
     }
 
     return Promise.reject('Failed to drop table');
+  } catch (error) {
+    console.error(error);
+    Promise.reject('Failed to drop table');
+  }
+};
+
+export const listColumns = async (tableName: string): Promise<ColumnDetailsList | undefined> => {
+  try {
+    const response = await API.get<ColumnDetailsList>(`/api/schema/tables/${tableName}/columns/`);
+
+    if (response.status === 200) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to fetch columns');
   } catch (error) {
     console.error(error);
     Promise.reject('Failed to drop table');

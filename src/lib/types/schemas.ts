@@ -25,3 +25,15 @@ export interface AddTableDetails {
   tableComment: string;
   columns: AddColumnDetails[];
 }
+
+export interface ColumnDetails {
+  columnName: string;
+  columnType: string;
+  columnDefault: string;
+  isNotNullable: boolean;
+  isUnique: boolean;
+}
+
+export interface ColumnDetailsList {
+  columnsList: ColumnDetails[];
+}

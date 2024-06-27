@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { listTables, dropTable } from '$lib/api/schemas';
+	import { listTables, dropTable, listColumns } from '$lib/api/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
 	import CreateTableModal from '$lib/components/database/create-table-modal.svelte';
 	import type { TableDetails, TableDetailsList } from '$lib/types/schemas';
@@ -20,6 +20,7 @@
 
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { DotsVerticalOutline } from 'flowbite-svelte-icons';
+	import { goto } from '$app/navigation';
 
 	let loading: boolean = false;
 	let tableDetails: TableDetails[] | undefined = [];
@@ -168,7 +169,9 @@
 						<TableBodyCell>{tableDetail.tableComment}</TableBodyCell>
 						<TableBodyCell>{tableDetail.createTime}</TableBodyCell>
 						<TableBodyCell>
-							<DotsVerticalOutline class={`dot-menu-${tableDetail.tableName} dark:text-white`} />
+							<DotsVerticalOutline
+								class={`dot-menu-${tableDetail.tableName} cursor-pointer dark:text-white`}
+							/>
 							<Dropdown
 								class="p-1"
 								placement="left"
@@ -194,7 +197,11 @@
 								</DropdownItem>
 
 								<DropdownItem class="flex items-center gap-2 rounded-lg py-2 text-xs">
-									<button class="flex items-center justify-center gap-2">
+									<button
+										on:click={() =>
+											goto(`/dashboard/database/tables/${tableDetail.tableName}/columns`)}
+										class="flex items-center justify-center gap-2"
+									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
