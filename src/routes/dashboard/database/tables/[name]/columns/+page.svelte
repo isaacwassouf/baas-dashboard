@@ -12,10 +12,11 @@
 		Badge,
 		Spinner,
 		Breadcrumb,
-		BreadcrumbItem
+		BreadcrumbItem,
+		Button
 	} from 'flowbite-svelte';
 	import { listColumns } from '$lib/api/schemas';
-	import { type ColumnDetails } from '$lib/types/schemas';
+	import { type ColumnDetails, type ForeignKeyDetails } from '$lib/types/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
 	import { toast } from 'svelte-french-toast';
 	import { dropColumn } from '$lib/api/schemas';
@@ -24,6 +25,7 @@
 	const loadingColumns: boolean = false;
 	let confirmDeleteColumnModalOpen: boolean = false;
 	let columnsDetails: ColumnDetails[] = [];
+	let foreignKeysDetails: ForeignKeyDetails[] = [];
 	let columnToBeDeleted: ColumnDetails | null = null;
 
 	const loadColumns = async (tableName: string) => {
@@ -31,6 +33,7 @@
 			const result = await listColumns(tableName);
 
 			columnsDetails = result?.columnsList ?? [];
+			foreignKeysDetails = result?.foreignKeysList ?? [];
 		} catch (error) {
 			console.error(error);
 		}
@@ -69,6 +72,40 @@
 	});
 </script>
 
+<ConformationModal bind:open={confirmDeleteColumnModalOpen} on:confirm={confirmDeleteColumn}>
+	<div slot="prompt">
+		<h3 class="mb-5 text-lg font-semibold text-gray-500 dark:text-gray-400">
+			Are you sure that you want to delete this column?
+		</h3>
+	</div>
+
+	<div
+		slot="warning"
+		class="mb-4 flex rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+		role="alert"
+	>
+		<svg
+			class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
+			aria-hidden="true"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="currentColor"
+			viewBox="0 0 20 20"
+		>
+			<path
+				d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+			/>
+		</svg>
+		<span class="sr-only">Danger</span>
+		<div>
+			<span class="text-md font-bold">Warning </span>
+			<p class="mt-2">
+				By deleting the <span class="font-bold">{columnToBeDeleted?.columnName}</span> column you
+				will also delete its
+				<span class="font-bold"> all of its data.</span> This action is not reversable.
+			</p>
+		</div>
+	</div>
+</ConformationModal>
 <Breadcrumb aria-label="Default breadcrumb example" class="mb-8">
 	<BreadcrumbItem href="/" home>Home</BreadcrumbItem>
 	<BreadcrumbItem>Database</BreadcrumbItem>
@@ -81,40 +118,26 @@
 		<Spinner />
 	</div>
 {:else}
-	<ConformationModal bind:open={confirmDeleteColumnModalOpen} on:confirm={confirmDeleteColumn}>
-		<div slot="prompt">
-			<h3 class="mb-5 text-lg font-semibold text-gray-500 dark:text-gray-400">
-				Are you sure that you want to delete this column?
-			</h3>
-		</div>
-
-		<div
-			slot="warning"
-			class="mb-4 flex rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-			role="alert"
+	<div class="mb-2 flex justify-end">
+		<Button
+			size="sm"
+			class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600"
 		>
 			<svg
-				class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
-				aria-hidden="true"
 				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
 				fill="currentColor"
-				viewBox="0 0 20 20"
+				class="size-4"
 			>
 				<path
-					d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+					fill-rule="evenodd"
+					d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+					clip-rule="evenodd"
 				/>
 			</svg>
-			<span class="sr-only">Danger</span>
-			<div>
-				<span class="text-md font-bold">Warning </span>
-				<p class="mt-2">
-					By deleting the <span class="font-bold">{columnToBeDeleted?.columnName}</span> column you
-					will also delete its
-					<span class="font-bold"> all of its data.</span> This action is not reversable.
-				</p>
-			</div>
-		</div>
-	</ConformationModal>
+			Add Column
+		</Button>
+	</div>
 	<Table>
 		<caption
 			class="rounded-t-md bg-gray-100 p-5 text-left text-lg font-semibold text-gray-900 dark:bg-gray-800 dark:text-white"
@@ -141,12 +164,34 @@
 					<TableBodyCell>{columnDetail.columnName}</TableBodyCell>
 					<TableBodyCell>{columnDetail.columnType}</TableBodyCell>
 					<TableBodyCell>{columnDetail.columnDefault}</TableBodyCell>
-					<TableBodyCell
-						><Indicator color={columnDetail.isNotNullable ? 'green' : 'red'} /></TableBodyCell
-					>
-					<TableBodyCell
-						><Indicator color={columnDetail.isUnique ? 'green' : 'red'} /></TableBodyCell
-					>
+					<TableBodyCell>
+						<Badge
+							color={columnDetail.isNotNullable ? 'green' : 'red'}
+							class="px-2.5 py-0.5"
+							rounded
+						>
+							<Indicator
+								size="xs"
+								color={columnDetail.isNotNullable ? 'green' : 'red'}
+								class="me-1"
+							/>
+							{#if columnDetail.isNotNullable}
+								True
+							{:else}
+								False
+							{/if}
+						</Badge>
+					</TableBodyCell>
+					<TableBodyCell>
+						<Badge color={columnDetail.isUnique ? 'green' : 'red'} class="px-2.5 py-0.5" rounded>
+							<Indicator size="xs" color={columnDetail.isUnique ? 'green' : 'red'} class="me-1" />
+							{#if columnDetail.isUnique}
+								True
+							{:else}
+								False
+							{/if}
+						</Badge>
+					</TableBodyCell>
 					<TableBodyCell>
 						{#if columnDetail.columnName === 'id' || columnDetail.columnName === 'created_at' || columnDetail.columnName === 'updated_at'}
 							<svg
@@ -183,6 +228,69 @@
 							</button>
 						{/if}
 					</TableBodyCell>
+				</TableBodyRow>
+			{/each}
+		</TableBody>
+	</Table>
+
+	<div class="mb-2 mt-10 flex justify-end">
+		<Button
+			size="sm"
+			class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="currentColor"
+				class="size-4"
+			>
+				<path
+					fill-rule="evenodd"
+					d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+					clip-rule="evenodd"
+				/>
+			</svg>
+			Add Foreign Key
+		</Button>
+	</div>
+	<Table>
+		<caption
+			class="rounded-t-md bg-gray-100 p-5 text-left text-lg font-semibold text-gray-900 dark:bg-gray-800 dark:text-white"
+		>
+			Table foreign keys
+
+			<p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
+				List of the foreign keys for table <Badge large class="bg-gray-300 text-gray-800"
+					>{name}</Badge
+				>
+			</p>
+		</caption>
+		<TableHead class="bg-gray-200">
+			<TableHeadCell>Column name</TableHeadCell>
+			<TableHeadCell>Reference table name</TableHeadCell>
+			<TableHeadCell>Reference column name</TableHeadCell>
+			<TableHeadCell>On Update</TableHeadCell>
+			<TableHeadCell>On Delete</TableHeadCell>
+			<TableHeadCell>
+				<span class="sr-only">Delete</span>
+			</TableHeadCell>
+		</TableHead>
+		<TableBody tableBodyClass="divide-y bg-gray-50">
+			{#each foreignKeysDetails as foreignKeyDetails (foreignKeyDetails.columnName)}
+				<TableBodyRow class="bg-gray-50">
+					<TableBodyCell>{foreignKeyDetails.columnName}</TableBodyCell>
+					<TableBodyCell>
+						<Badge
+							large
+							class="cursor-pointer bg-gray-300 text-gray-800 hover:bg-gray-400 hover:text-gray-900"
+						>
+							{foreignKeyDetails.referenceTableName}
+						</Badge>
+					</TableBodyCell>
+					<TableBodyCell>{foreignKeyDetails.referenceColumnName}</TableBodyCell>
+					<TableBodyCell>{foreignKeyDetails.onUpdate}</TableBodyCell>
+					<TableBodyCell>{foreignKeyDetails.onDelete}</TableBodyCell>
+					<TableBodyCell></TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>

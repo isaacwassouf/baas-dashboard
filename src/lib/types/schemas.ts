@@ -34,6 +34,15 @@ export interface ColumnDetails {
   isUnique: boolean;
 }
 
+export interface ForeignKeyDetails {
+  columnName: string;
+  referenceTableName: string;
+  referenceColumnName: string;
+  onUpdate: string;
+  onDelete: string;
+}
+
 export interface ColumnDetailsList {
   columnsList: ColumnDetails[];
+  foreignKeysList: ForeignKeyDetails[];
 }
