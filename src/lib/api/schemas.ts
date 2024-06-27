@@ -1,9 +1,7 @@
 import { API } from '$lib/api';
 import {
   type AddTableDetails,
-  type ColumnDetails,
   type ColumnDetailsList,
-  type TableDetails,
   type TableDetailsList
 } from '$lib/types/schemas';
 
@@ -63,5 +61,20 @@ export const listColumns = async (tableName: string): Promise<ColumnDetailsList 
   } catch (error) {
     console.error(error);
     Promise.reject('Failed to drop table');
+  }
+};
+
+export const dropColumn = async (tableName: string, columnName: string): Promise<void> => {
+  try {
+    const response = await API.delete(`/api/schema/tables/${tableName}/columns/${columnName}`);
+
+    if (response.status === 200) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject('Failed to drop column');
+  } catch (error) {
+    console.error(error);
+    Promise.reject('Failed to drop column');
   }
 };

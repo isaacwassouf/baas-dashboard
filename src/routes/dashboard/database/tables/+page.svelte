@@ -110,6 +110,7 @@
 <Breadcrumb aria-label="Default breadcrumb example" class="mb-8">
 	<BreadcrumbItem href="/" home>Home</BreadcrumbItem>
 	<BreadcrumbItem>Database</BreadcrumbItem>
+	<BreadcrumbItem>Tables</BreadcrumbItem>
 </Breadcrumb>
 
 {#if loading}
