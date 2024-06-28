@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { listTables, dropTable, listColumns } from '$lib/api/schemas';
+	import { listTables, dropTable } from '$lib/api/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
 	import CreateTableModal from '$lib/components/database/create-table-modal.svelte';
-	import type { TableDetails, TableDetailsList } from '$lib/types/schemas';
+	import type { TableDetails } from '$lib/types/schemas';
 	import {
 		Table,
 		TableBody,
@@ -20,7 +20,6 @@
 
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { DotsVerticalOutline } from 'flowbite-svelte-icons';
-	import { goto } from '$app/navigation';
 
 	let loading: boolean = false;
 	let tableDetails: TableDetails[] | undefined = [];
@@ -198,10 +197,10 @@
 								</DropdownItem>
 
 								<DropdownItem class="flex items-center gap-2 rounded-lg py-2 text-xs">
-									<button
-										on:click={() =>
-											goto(`/dashboard/database/tables/${tableDetail.tableName}/columns`)}
+									<a
+										href={`/dashboard/database/tables/${tableDetail.tableName}/columns`}
 										class="flex items-center justify-center gap-2"
+										data-sveltekit-preload-code="hover"
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +213,7 @@
 											/>
 										</svg>
 										<span>View columns</span>
-									</button>
+									</a>
 								</DropdownItem>
 
 								<DropdownItem class="flex items-center gap-2 rounded-lg py-2 text-xs">

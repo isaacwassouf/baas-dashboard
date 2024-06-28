@@ -14,7 +14,14 @@
 	];
 </script>
 
-<Select {id} items={actions} placeholder={'Select an action'} searchable={false} bind:justValue>
+<Select
+	{id}
+	items={actions}
+	placeholder={'Select an action'}
+	searchable={false}
+	bind:justValue
+	required
+>
 	<div slot="item" let:item>
 		<ReferenialActionSelectItem action={item} />
 	</div>
