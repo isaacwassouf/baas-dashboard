@@ -15,7 +15,7 @@
 		Drawer,
 		CloseButton
 	} from 'flowbite-svelte';
-	import { Cog, Home } from 'svelte-heros-v2';
+	import { Cog } from 'svelte-heros-v2';
 	import { sineIn } from 'svelte/easing';
 
 	let transitionParams = {
@@ -58,8 +58,6 @@
 	let divClass = 'w-full ml-auto lg:block lg:w-auto order-1 lg:order-none';
 	let ulClass =
 		'flex flex-col py-3 my-4 lg:flex-row lg:my-0 text-sm font-medium gap-4 dark:lg:bg-transparent lg:bg-white lg:border-0';
-	let navDivClass =
-		'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700 flex items-center justify-between w-full mx-auto py-1.5 px-4';
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -162,8 +160,8 @@
 					{spanClass}
 					activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700"
 					on:click={toggleSide}
-					active={activeUrl === `comsthing`}
-					class="font-medium hover:bg-gray-200"
+					active={activeUrl.startsWith(`/dashboard/database`)}
+					class={`font-medium hover:bg-gray-200 ${activeUrl.startsWith(`/dashboard/database`) ? 'bg-gray-200 hover:bg-gray-300' : ''}`}
 				>
 					<svelte fragment slot="icon">
 						<svg
