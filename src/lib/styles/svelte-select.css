@@ -1,0 +1,118 @@
+/*
+    Normal selectbox
+*/
+
+.svelte-select {
+	@apply rounded-lg bg-gray-50 pl-3 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white !important;
+}
+
+.svelte-select.focused,
+.svelte-select.list-open {
+	@apply border-primary-500 ring-0 dark:border-blue-500 dark:ring-blue-500 !important;
+}
+
+.svelte-select.disabled {
+	@apply cursor-not-allowed border-slate-200 bg-slate-50 text-slate-500 shadow-none dark:border-slate-500 dark:bg-slate-800 dark:text-slate-500 !important;
+}
+
+.svelte-select.invalid {
+	@apply border-red-500 ring-1 ring-red-500 !important;
+}
+
+/* Remove Tailwind default input ring on focus */
+.svelte-select input {
+	@apply focus:ring-0 !important;
+}
+
+.svelte-select input::placeholder {
+	@apply text-sm !important;
+}
+
+.svelte-select .value-container {
+	@apply py-0 !important;
+}
+
+.svelte-select .value-container .selected-item {
+	@apply text-sm !important;
+}
+
+.svelte-select .indicators {
+	@apply cursor-pointer;
+}
+
+.svelte-select .indicators .icon {
+	@apply rounded-r-md border-l border-gray-300 bg-gray-50 text-gray-500 transition-colors hover:bg-gray-200 hover:text-primary-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 !important;
+}
+
+.svelte-select .indicators .icon.loading {
+	@apply h-full cursor-default !important;
+}
+
+.svelte-select .svelte-select-list {
+	@apply rounded-sm bg-white shadow-md dark:bg-gray-700 !important;
+}
+
+.svelte-select .svelte-select-list .empty {
+	@apply py-5 text-center text-gray-500 dark:text-gray-400 !important;
+}
+
+.svelte-select .svelte-select-list .list-group-title {
+	@apply h-10 cursor-default overflow-ellipsis whitespace-nowrap bg-white px-5 text-sm font-medium uppercase leading-10 text-gray-400 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-700 !important;
+}
+
+.svelte-select .svelte-select-list .item {
+	@apply h-auto !important;
+}
+
+.svelte-select .svelte-select-list .item.active:not(.list-group-title),
+.svelte-select .svelte-select-list .item:active:not(.list-group-title) {
+	@apply bg-gray-200 text-white dark:bg-gray-800 !important;
+}
+
+.svelte-select .svelte-select-list .item.hover:not(.list-group-title):not(.active) {
+	@apply cursor-pointer bg-gray-100 dark:bg-gray-600 !important;
+}
+
+/*
+    Multiselect
+*/
+
+.svelte-select.multi {
+	@apply items-stretch !important;
+}
+
+.svelte-select.multi .value-container {
+	@apply py-2 pr-3 !important;
+}
+
+.svelte-select.multi .icon.clear-select {
+	@apply h-full focus:text-sky-300;
+}
+
+.svelte-select.multi .svelte-select-list .item {
+	@apply leading-5 !important;
+}
+
+.svelte-select.multi .multi-item {
+	@apply relative h-auto w-full rounded border-0 bg-gray-200 leading-5 outline-0 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800 !important;
+}
+
+.svelte-select.multi .multi-item-clear {
+	@apply absolute right-1 top-1 ml-auto hidden cursor-pointer items-center rounded bg-gray-100 p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white !important;
+}
+
+.svelte-select.multi .multi-item-clear svg {
+	@apply h-4 w-4 !important;
+}
+
+.svelte-select.multi .multi-item:hover .multi-item-clear {
+	@apply block !important;
+}
+
+.svelte-select.multi input {
+	@apply rounded-sm border-2 border-dashed border-gray-300 px-2 py-1 hover:bg-gray-100 dark:border-gray-500 dark:hover:bg-gray-800 !important;
+}
+
+.svelte-select.multi input::placeholder {
+	@apply text-sm !important;
+}

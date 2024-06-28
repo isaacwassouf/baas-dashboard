@@ -18,6 +18,7 @@
 	import { listColumns } from '$lib/api/schemas';
 	import { type ColumnDetails, type ForeignKeyDetails } from '$lib/types/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
+	import AddForeignKeyModal from '$lib/components/database/add-foreign-key-modal.svelte';
 	import { toast } from 'svelte-french-toast';
 	import { dropColumn } from '$lib/api/schemas';
 
@@ -27,6 +28,7 @@
 	let columnsDetails: ColumnDetails[] = [];
 	let foreignKeysDetails: ForeignKeyDetails[] = [];
 	let columnToBeDeleted: ColumnDetails | null = null;
+	let foreignKeyModalOpen: boolean = false;
 
 	const loadColumns = async (tableName: string) => {
 		try {
@@ -65,12 +67,26 @@
 		}
 	};
 
+	const openForeignKeyModal = () => {
+		foreignKeyModalOpen = true;
+	};
+
+	const handleForeignKeyAdded = async () => {
+		await loadColumns(name);
+	};
+
 	onMount(async () => {
 		if (name) {
 			await loadColumns(name);
 		}
 	});
 </script>
+
+<AddForeignKeyModal
+	bind:open={foreignKeyModalOpen}
+	tableName={name}
+	on:foreign-key-added={handleForeignKeyAdded}
+/>
 
 <ConformationModal bind:open={confirmDeleteColumnModalOpen} on:confirm={confirmDeleteColumn}>
 	<div slot="prompt">
@@ -237,6 +253,7 @@
 		<Button
 			size="sm"
 			class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600"
+			on:click={openForeignKeyModal}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

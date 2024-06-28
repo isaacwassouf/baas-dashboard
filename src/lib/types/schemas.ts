@@ -46,3 +46,24 @@ export interface ColumnDetailsList {
   columnsList: ColumnDetails[];
   foreignKeysList: ForeignKeyDetails[];
 }
+
+export interface TableSelectOptionItem {
+  value: string;
+  label: string;
+}
+
+export interface ColumnSelectOptionItem {
+  value: string;
+  label: string;
+}
+
+export interface ReferenialActionSelectOptionItem {
+  value: string;
+  label: string;
+}
+
+export interface AddForeignKeyDetails {
+  tableName: string;
+  isNotNullable: boolean;
+  foriegnKeyDetails: ForeignKeyDetails;
+}

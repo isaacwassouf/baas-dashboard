@@ -2,7 +2,8 @@ import { API } from '$lib/api';
 import {
   type AddTableDetails,
   type ColumnDetailsList,
-  type TableDetailsList
+  type TableDetailsList,
+  type AddForeignKeyDetails
 } from '$lib/types/schemas';
 
 export const listTables = async (): Promise<TableDetailsList | undefined> => {
@@ -76,5 +77,23 @@ export const dropColumn = async (tableName: string, columnName: string): Promise
   } catch (error) {
     console.error(error);
     Promise.reject('Failed to drop column');
+  }
+};
+
+export const addForeignKey = async (addForeignKeyDetails: AddForeignKeyDetails): Promise<void> => {
+  try {
+    const response = await API.post(
+      `/api/schema/tables/${addForeignKeyDetails.tableName}/foreign-keys`,
+      addForeignKeyDetails
+    );
+
+    if (response.status === 200) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject('Failed to add foreign key');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to add foreign key');
   }
 };
