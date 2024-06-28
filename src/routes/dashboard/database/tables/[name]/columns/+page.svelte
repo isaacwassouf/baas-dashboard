@@ -20,15 +20,17 @@
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
 	import AddForeignKeyModal from '$lib/components/database/add-foreign-key-modal.svelte';
 	import { toast } from 'svelte-french-toast';
-	import { dropColumn } from '$lib/api/schemas';
+	import { dropColumn, dropForeignKey } from '$lib/api/schemas';
 
 	const { name } = $page.params;
 	const loadingColumns: boolean = false;
 	let confirmDeleteColumnModalOpen: boolean = false;
+	let confirmDeleteForeignKeyModalOpen: boolean = false;
 	let columnsDetails: ColumnDetails[] = [];
 	let foreignKeysDetails: ForeignKeyDetails[] = [];
 	let columnToBeDeleted: ColumnDetails | null = null;
-	let foreignKeyModalOpen: boolean = false;
+	let foreignKeyToBeDeleted: ForeignKeyDetails | null = null;
+	let addForeignKeyModalOpen: boolean = false;
 
 	const loadColumns = async (tableName: string) => {
 		try {
@@ -67,12 +69,44 @@
 		}
 	};
 
-	const openForeignKeyModal = () => {
-		foreignKeyModalOpen = true;
+	const confirmDeleteForeignKey = async () => {
+		try {
+			await dropForeignKey(name, foreignKeyToBeDeleted!.columnName);
+
+			toast.success('Foreign key deleted successfully', {
+				position: 'bottom-right'
+			});
+
+			await loadColumns(name);
+		} catch (error) {
+			console.error(error);
+			toast.error('Failed to delete foreign key', {
+				position: 'bottom-right'
+			});
+		}
 	};
 
+	const openAddForeignKeyModal = () => {
+		addForeignKeyModalOpen = true;
+	};
+
+	const markForeignKeyForDeletion = (foreignKey: ForeignKeyDetails) => {
+		foreignKeyToBeDeleted = foreignKey;
+	};
+
+	const openDeleteForeignKeyModal = (foreignKey: ForeignKeyDetails) => {
+		markForeignKeyForDeletion(foreignKey);
+		confirmDeleteForeignKeyModalOpen = true;
+	};
+
+	// called after the foreign key is added
 	const handleForeignKeyAdded = async () => {
 		await loadColumns(name);
+	};
+
+	// check if the column is a foreign key
+	const isForeignKey = (column: ColumnDetails) => {
+		return foreignKeysDetails.some((foreignKey) => foreignKey.columnName === column.columnName);
 	};
 
 	onMount(async () => {
@@ -83,7 +117,7 @@
 </script>
 
 <AddForeignKeyModal
-	bind:open={foreignKeyModalOpen}
+	bind:open={addForeignKeyModalOpen}
 	tableName={name}
 	on:foreign-key-added={handleForeignKeyAdded}
 />
@@ -122,6 +156,45 @@
 		</div>
 	</div>
 </ConformationModal>
+
+<ConformationModal
+	bind:open={confirmDeleteForeignKeyModalOpen}
+	on:confirm={confirmDeleteForeignKey}
+>
+	<div slot="prompt">
+		<h3 class="mb-5 text-lg font-semibold text-gray-500 dark:text-gray-400">
+			Are you sure that you want to delete this foreign key?
+		</h3>
+	</div>
+
+	<div
+		slot="warning"
+		class="mb-4 flex rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+		role="alert"
+	>
+		<svg
+			class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
+			aria-hidden="true"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="currentColor"
+			viewBox="0 0 20 20"
+		>
+			<path
+				d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+			/>
+		</svg>
+		<span class="sr-only">Danger</span>
+		<div>
+			<span class="text-md font-bold">Warning </span>
+			<p class="mt-2">
+				By deleting the <span class="font-bold">{foreignKeyToBeDeleted?.columnName}</span> column
+				you will also delete its
+				<span class="font-bold"> all of its data.</span> This action is not reversable.
+			</p>
+		</div>
+	</div>
+</ConformationModal>
+
 <Breadcrumb aria-label="Default breadcrumb example" class="mb-8">
 	<BreadcrumbItem href="/" home>Home</BreadcrumbItem>
 	<BreadcrumbItem>Database</BreadcrumbItem>
@@ -222,6 +295,19 @@
 									clip-rule="evenodd"
 								/>
 							</svg>
+						{:else if isForeignKey(columnDetail)}
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+								class="size-4"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z"
+									clip-rule="evenodd"
+								/>
+							</svg>
 						{:else}
 							<button
 								class="flex items-center justify-center gap-2"
@@ -253,7 +339,7 @@
 		<Button
 			size="sm"
 			class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600"
-			on:click={openForeignKeyModal}
+			on:click={openAddForeignKeyModal}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -307,7 +393,22 @@
 					<TableBodyCell>{foreignKeyDetails.referenceColumnName}</TableBodyCell>
 					<TableBodyCell>{foreignKeyDetails.onUpdate}</TableBodyCell>
 					<TableBodyCell>{foreignKeyDetails.onDelete}</TableBodyCell>
-					<TableBodyCell></TableBodyCell>
+					<TableBodyCell>
+						<button on:click|preventDefault={() => openDeleteForeignKeyModal(foreignKeyDetails)}>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+								class="size-4 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z"
+									clip-rule="evenodd"
+								/>
+							</svg>
+						</button>
+					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>
