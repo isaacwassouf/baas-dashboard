@@ -19,6 +19,7 @@
 	import { type ColumnDetails, type ForeignKeyDetails } from '$lib/types/schemas';
 	import ConformationModal from '$lib/components/shared/conformation-modal.svelte';
 	import AddForeignKeyModal from '$lib/components/database/add-foreign-key-modal.svelte';
+	import AddColumnModal from '$lib/components/database/add-column-modal.svelte';
 	import { toast } from 'svelte-french-toast';
 	import { dropColumn, dropForeignKey } from '$lib/api/schemas';
 
@@ -26,6 +27,7 @@
 	const loadingColumns: boolean = false;
 	let confirmDeleteColumnModalOpen: boolean = false;
 	let confirmDeleteForeignKeyModalOpen: boolean = false;
+	let addColumnModalOpen: boolean = false;
 	let columnsDetails: ColumnDetails[] = [];
 	let foreignKeysDetails: ForeignKeyDetails[] = [];
 	let columnToBeDeleted: ColumnDetails | null = null;
@@ -90,6 +92,10 @@
 		addForeignKeyModalOpen = true;
 	};
 
+	const openAddColumnModal = () => {
+		addColumnModalOpen = true;
+	};
+
 	const markForeignKeyForDeletion = (foreignKey: ForeignKeyDetails) => {
 		foreignKeyToBeDeleted = foreignKey;
 	};
@@ -104,6 +110,11 @@
 		await loadColumns(name);
 	};
 
+	// called after the column is added
+	const handleColumnAdded = async () => {
+		await loadColumns(name);
+	};
+
 	// check if the column is a foreign key
 	const isForeignKey = (column: ColumnDetails) => {
 		return foreignKeysDetails.some((foreignKey) => foreignKey.columnName === column.columnName);
@@ -115,6 +126,12 @@
 		}
 	});
 </script>
+
+<AddColumnModal
+	bind:open={addColumnModalOpen}
+	tableName={name}
+	on:column-added={handleColumnAdded}
+/>
 
 <AddForeignKeyModal
 	bind:open={addForeignKeyModalOpen}
@@ -211,6 +228,7 @@
 		<Button
 			size="sm"
 			class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600"
+			on:click={openAddColumnModal}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
