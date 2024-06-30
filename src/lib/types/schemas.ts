@@ -10,20 +10,10 @@ export interface TableDetailsList {
   tablesList: TableDetails[];
 }
 
-export interface AddColumnDetails {
-  uniqueId: string;
-  columnName: string;
-  columnType: string;
-  columnDefault: string;
-  isPrimary: boolean;
-  isNullable: boolean;
-  isUnique: boolean;
-}
-
 export interface AddTableDetails {
   tableName: string;
   tableComment: string;
-  columns: AddColumnDetails[];
+  columns: NewColumnDetails[];
 }
 
 export interface ColumnDetails {

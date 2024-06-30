@@ -1,35 +1,21 @@
 <script lang="ts">
-	import { TableBodyCell, TableBodyRow, Input, Select, Checkbox } from 'flowbite-svelte';
-	import { type AddColumnDetails } from '$lib/types/schemas';
+	import { TableBodyCell, TableBodyRow, Input, Checkbox } from 'flowbite-svelte';
+	import { type NewColumnDetails } from '$lib/types/schemas';
 	import { addColumnsStore } from '$lib/stores/add-columns';
+	import ColumnTypeSelect from '../shared/selects/ColumnTypeSelect.svelte';
 
 	// props
-	export let columnDetails: AddColumnDetails;
+	export let columnDetails: NewColumnDetails;
 	export let index: number;
-
-	let countries = [
-		{ value: 'int16', name: 'int16' },
-		{ value: 'uint16', name: 'uint16' },
-		{ value: 'int24', name: 'int24' },
-		{ value: 'uint24', name: 'uint24' },
-		{ value: 'int32', name: 'int32' },
-		{ value: 'uint32', name: 'uint32' },
-		{ value: 'int64', name: 'int64' },
-		{ value: 'uint64', name: 'uint64' }
-	];
+	export let isSystemColumn: boolean = false;
 
 	const removeColumn = () => {
 		addColumnsStore.update((columns) => columns.filter((_, i) => i !== index));
 	};
-
-	$: isSystemColumn =
-		columnDetails.uniqueId === 'ID' ||
-		columnDetails.uniqueId === 'CREATED_AT' ||
-		columnDetails.uniqueId === 'UPDATED_AT';
 </script>
 
 <TableBodyRow>
-	<TableBodyCell class="px-2 py-1">
+	<TableBodyCell class="w-48 px-2 py-1">
 		<Input
 			type="text"
 			name="column-name"
@@ -41,17 +27,32 @@
 		/>
 	</TableBodyCell>
 
-	<TableBodyCell class="px-2 py-1">
-		<Select
-			items={countries}
-			bind:value={columnDetails.columnType}
-			placeholder="----"
-			disabled={isSystemColumn}
-			class={isSystemColumn ? 'cursor-not-allowed' : ''}
-		/>
+	<TableBodyCell class="w-64 px-2 py-1">
+		<div class="flex gap-2">
+			<ColumnTypeSelect
+				id="columnType"
+				disabled={isSystemColumn}
+				bind:justValue={columnDetails.columnType}
+			/>
+
+			{#if columnDetails.columnType === 'varchar'}
+				<Input
+					type="number"
+					class="basis-1/4"
+					name="column-length"
+					min="0"
+					max="65535"
+					size="md"
+					placeholder="length"
+					required
+					bind:value={columnDetails.columnLength}
+					disabled={isSystemColumn}
+				/>
+			{/if}
+		</div>
 	</TableBodyCell>
 
-	<TableBodyCell class="px-2 py-1">
+	<TableBodyCell class="w-48 px-2 py-1">
 		<Input
 			type="text"
 			name="column-default"
@@ -62,16 +63,7 @@
 		/>
 	</TableBodyCell>
 
-	<TableBodyCell class="px-2 py-1">
-		<Checkbox
-			name="column-primary"
-			checked={columnDetails.isPrimary}
-			disabled={isSystemColumn}
-			class={isSystemColumn ? 'cursor-not-allowed opacity-80' : ''}
-		/>
-	</TableBodyCell>
-
-	<TableBodyCell class="px-2 py-1">
+	<TableBodyCell class="w-12 px-2 py-1">
 		<Checkbox
 			name="column-Unique"
 			bind:checked={columnDetails.isUnique}
@@ -80,16 +72,16 @@
 		/>
 	</TableBodyCell>
 
-	<TableBodyCell class="px-2 py-1">
+	<TableBodyCell class="w-12 px-2 py-1">
 		<Checkbox
 			name="column-nullable"
-			bind:checked={columnDetails.isNullable}
+			bind:checked={columnDetails.isNotNullable}
 			disabled={isSystemColumn}
 			class={isSystemColumn ? 'cursor-not-allowed opacity-80' : ''}
 		/>
 	</TableBodyCell>
 
-	<TableBodyCell class="px-2 py-1">
+	<TableBodyCell class="ml-auto w-12 px-2 py-1">
 		{#if isSystemColumn}
 			<span class="text-xs text-gray-500 dark:text-gray-400">
 				<svg

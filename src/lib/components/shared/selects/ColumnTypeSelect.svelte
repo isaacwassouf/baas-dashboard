@@ -5,6 +5,11 @@
 
 	export let id: string;
 	export let justValue: string = '';
+	export let disabled: boolean = false;
+
+	let floatingConfig = {
+		strategy: 'fixed'
+	};
 
 	let columnTypes: ColumnTypeSelectOptionItem[] = [
 		{ value: 'uint16', label: 'uint16', root: 'numerical' },
@@ -28,6 +33,8 @@
 	searchable={false}
 	bind:justValue
 	groupBy={groupByRoot}
+	{floatingConfig}
+	{disabled}
 	required
 >
 	<div slot="item" let:item>

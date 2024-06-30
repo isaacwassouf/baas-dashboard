@@ -6,6 +6,8 @@
 	import { addColumnsStore } from '$lib/stores/add-columns';
 	import type { AddTableDetails } from '$lib/types/schemas';
 	import { createTable } from '$lib/api/schemas';
+	import '$lib/styles/svelte-select.css';
+	import toast from 'svelte-french-toast';
 
 	export let open = false;
 	export let size: ComponentProps<Modal>['size'] = 'xl';
@@ -20,23 +22,21 @@
 
 	const addColumn = () => {
 		addColumnsStore.update((columns) => {
-			// add the column after the fist column
-			columns.splice(1, 0, {
-				uniqueId: '',
+			columns.push({
 				columnName: '',
 				columnType: '',
 				columnDefault: '',
-				isPrimary: false,
 				isUnique: false,
-				isNullable: false
+				isNotNullable: false,
+				columnLength: 0
 			});
-
 			return columns;
 		});
 	};
 
 	const handleSubmit = (event: Event) => {
 		event.preventDefault();
+		console.log($addColumnsStore);
 		addingTable = true;
 		try {
 			createTable({
@@ -44,8 +44,11 @@
 				tableComment: addTableDetails.tableComment,
 				columns: $addColumnsStore
 			});
+
+			toast.success('Table created successfully');
 		} catch (error) {
 			console.error(error);
+			toast.error('Failed to create table');
 		} finally {
 			addingTable = false;
 		}
@@ -84,7 +87,6 @@
 					<TableHeadCell class="py-1 text-gray-600">Column name</TableHeadCell>
 					<TableHeadCell class="py-1 text-gray-600">Type</TableHeadCell>
 					<TableHeadCell class="py-1 text-gray-600">Default</TableHeadCell>
-					<TableHeadCell class="py-1 text-gray-600">Primary</TableHeadCell>
 					<TableHeadCell class="py-1 text-gray-600">Unique</TableHeadCell>
 					<TableHeadCell class="py-1 text-gray-600">Not Nullable</TableHeadCell>
 					<TableHeadCell class="py-1 text-gray-600">
@@ -92,9 +94,48 @@
 					</TableHeadCell>
 				</TableHead>
 				<TableBody tableBodyClass="divide-y">
+					<AddColumnItem
+						columnDetails={{
+							columnName: 'id',
+							columnType: 'uint64',
+							columnDefault: '',
+							isUnique: true,
+							isNotNullable: true,
+							columnLength: 0
+						}}
+						index={0}
+						isSystemColumn={true}
+					/>
+
 					{#each $addColumnsStore as columnDetails, index (index)}
 						<AddColumnItem {columnDetails} {index} />
 					{/each}
+
+					<AddColumnItem
+						columnDetails={{
+							columnName: 'created_at',
+							columnType: 'timestamp',
+							columnDefault: 'CURRENT_TIMESTAMP',
+							isUnique: false,
+							isNotNullable: true,
+							columnLength: 0
+						}}
+						index={0}
+						isSystemColumn={true}
+					/>
+
+					<AddColumnItem
+						columnDetails={{
+							columnName: 'updated_at',
+							columnType: 'timestamp',
+							columnDefault: 'CURRENT_TIMESTAMP',
+							isUnique: false,
+							isNotNullable: true,
+							columnLength: 0
+						}}
+						index={0}
+						isSystemColumn={true}
+					/>
 				</TableBody>
 			</Table>
 		</Label>
@@ -107,6 +148,6 @@
 			>
 		</div>
 
-		<Button type="submit" class="w-full1" on:click={handleSubmit}>Create table</Button>
+		<Button type="submit" class="w-full" on:click={handleSubmit}>Create table</Button>
 	</form>
 </Modal>

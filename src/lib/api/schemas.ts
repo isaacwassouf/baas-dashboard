@@ -4,8 +4,6 @@ import {
   type ColumnDetailsList,
   type TableDetailsList,
   type AddForeignKeyDetails,
-  type ColumnDetails,
-  type AddColumnDetails,
   type NewColumnDetails
 } from '$lib/types/schemas';
 
@@ -26,7 +24,7 @@ export const listTables = async (): Promise<TableDetailsList | undefined> => {
 export const createTable = async (table: AddTableDetails): Promise<void> => {
   console.log('table', table);
   try {
-    const response = await API.post('/table', table);
+    const response = await API.post('/api/schema/tables', table);
 
     if (response.status === 200) {
       return Promise.resolve();
@@ -35,6 +33,7 @@ export const createTable = async (table: AddTableDetails): Promise<void> => {
     return Promise.reject('Failed to create table');
   } catch (error) {
     console.error(error);
+    throw new Error('Failed to create table');
   }
 };
 
