@@ -178,7 +178,11 @@
 								triggeredBy={`.dot-menu-${tableDetail.tableName}`}
 							>
 								<DropdownItem class="flex items-center gap-2 rounded-lg py-2 text-xs">
-									<button class="flex items-center justify-center gap-2">
+									<a
+										href={`/dashboard/database/tables/${tableDetail.tableName}/view`}
+										class="flex items-center justify-center gap-2"
+										data-sveltekit-preload-code="hover"
+									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											viewBox="0 0 24 24"
@@ -193,7 +197,7 @@
 											/>
 										</svg>
 										<span>View data</span>
-									</button>
+									</a>
 								</DropdownItem>
 
 								<DropdownItem class="flex items-center gap-2 rounded-lg py-2 text-xs">
