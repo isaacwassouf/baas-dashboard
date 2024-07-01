@@ -13,7 +13,8 @@
 		Spinner,
 		Breadcrumb,
 		BreadcrumbItem,
-		Button
+		Button,
+		Tooltip
 	} from 'flowbite-svelte';
 	import { listColumns } from '$lib/api/schemas';
 	import { type ColumnDetails, type ForeignKeyDetails } from '$lib/types/schemas';
@@ -306,6 +307,7 @@
 								viewBox="0 0 24 24"
 								fill="currentColor"
 								class="size-4"
+								id={`column-${columnDetail.columnName}`}
 							>
 								<path
 									fill-rule="evenodd"
@@ -313,12 +315,14 @@
 									clip-rule="evenodd"
 								/>
 							</svg>
+							<Tooltip triggeredBy={`#column-${columnDetail.columnName}`}>System column</Tooltip>
 						{:else if isForeignKey(columnDetail)}
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
 								fill="currentColor"
 								class="size-4"
+								id={`foreign-key-${columnDetail.columnName}`}
 							>
 								<path
 									fill-rule="evenodd"
@@ -326,6 +330,7 @@
 									clip-rule="evenodd"
 								/>
 							</svg>
+							<Tooltip triggeredBy={`#foreign-key-${columnDetail.columnName}`}>Foreign key</Tooltip>
 						{:else}
 							<button
 								class="flex items-center justify-center gap-2"
