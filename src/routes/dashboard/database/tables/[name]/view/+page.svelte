@@ -12,7 +12,7 @@
 		Badge
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
-	import { getContent } from '$lib/api/contents';
+	import { listContent } from '$lib/api/contents';
 	import { listColumns } from '$lib/api/schemas';
 	import type { TableViewResponse, TableViewRow } from '$lib/types/contents';
 	import { onMount } from 'svelte';
@@ -35,7 +35,7 @@
 
 	const loadContent = async () => {
 		try {
-			const result: TableViewResponse | undefined = await getContent();
+			const result: TableViewResponse | undefined = await listContent(name);
 			tableRows = result?.entities ?? [];
 		} catch (error) {
 			console.error(error);

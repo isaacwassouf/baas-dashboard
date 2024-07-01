@@ -1,9 +1,9 @@
 import { API } from '$lib/api';
 import type { TableViewResponse } from '$lib/types/contents';
 
-export const getContent = async (): Promise<TableViewResponse | undefined> => {
+export const listContent = async (tableName: string): Promise<TableViewResponse | undefined> => {
   try {
-    const response = await API.get<TableViewResponse>('/api/contents/tables/comments');
+    const response = await API.get<TableViewResponse>(`/api/contents/tables/${tableName}`);
 
     if (response.status === 200) {
       return response.data;
