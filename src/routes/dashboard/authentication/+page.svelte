@@ -12,13 +12,16 @@
 		Toggle
 	} from 'flowbite-svelte';
 	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
-	import { enableAuthProvider, listAuthProviders, disableAuthProvider } from '$lib/api/auth';
+	import {
+		enableAuthProvider,
+		listAuthProviders,
+		disableAuthProvider,
+		setAuthProviderCredentials
+	} from '$lib/api/auth';
 	import toast from 'svelte-french-toast';
 	import type { AuthProvider } from '$lib/types/auth';
 	import GoogleIcon from '$lib/components/shared/icons/google.svelte';
 	import { onMount } from 'svelte';
-	import { CopyClipboard } from 'flowbite';
-	import { ClipboardSolid, FileCopySolid } from 'flowbite-svelte-icons';
 
 	let loadingAuthProviders: boolean = false;
 	let settingCredentials: boolean = false;
@@ -97,6 +100,25 @@
 		}
 	};
 
+	const handleCredentialsSave = (authProvider: AuthProvider) => async (event: Event) => {
+		event.preventDefault();
+		settingCredentials = true;
+		try {
+			// Save the credentials
+			await setAuthProviderCredentials(authProvider);
+			toast.success('Credentials saved successfully', {
+				position: 'bottom-right'
+			});
+		} catch (e) {
+			console.error(e);
+			toast.error('Failed to save credentials', {
+				position: 'bottom-right'
+			});
+		} finally {
+			settingCredentials = false;
+		}
+	};
+
 	onMount(() => {
 		loadAuthProviders();
 	});
@@ -135,7 +157,7 @@
 							name="clientID"
 							placeholder="OpenID Connect client ID"
 							required
-							value={authProvider.clientId}
+							bind:value={authProvider.clientId}
 						/>
 					</Label>
 
@@ -144,7 +166,13 @@
 						<small class="text-gray-500">
 							This is the client secret of your Google OAuth2 application
 						</small>
-						<Input type="password" name="ClientSecret" placeholder="•••••••••••••••" required />
+						<Input
+							type="password"
+							name="ClientSecret"
+							placeholder="•••••••••••••••"
+							required
+							bind:value={authProvider.clientSecret}
+						/>
 					</Label>
 
 					<Label class="space-y-1">
@@ -162,7 +190,12 @@
 						/>
 					</Label>
 
-					<Button color="green" size="xs" class="w-1/6">
+					<Button
+						color="green"
+						size="xs"
+						class="w-1/6"
+						on:click={handleCredentialsSave(authProvider)}
+					>
 						{#if settingCredentials}
 							<Spinner color="white" class="mr-2 h-4 w-4" />
 						{/if}

@@ -3,6 +3,7 @@ export interface AuthProvider {
   name: string;
   active: boolean;
   clientId: string;
+  clientSecret: string;
 }
 
 export interface AuthProvidersList {

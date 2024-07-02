@@ -1,5 +1,5 @@
 import { API } from '$lib/api';
-import type { AuthProvidersList } from '$lib/types/auth';
+import type { AuthProvider, AuthProvidersList } from '$lib/types/auth';
 
 export const listAuthProviders = async (): Promise<AuthProvidersList | undefined> => {
   try {
@@ -43,5 +43,23 @@ export const disableAuthProvider = async (authProviderId: number): Promise<void>
   } catch (error) {
     console.error(error);
     throw new Error('Failed enable auth provider');
+  }
+};
+
+export const setAuthProviderCredentials = async (authProvider: AuthProvider): Promise<void> => {
+  try {
+    const response = await API.patch(`/api/auth/providers/${authProvider.id}/credentials`, {
+      clientId: authProvider.clientId,
+      clientSecret: authProvider.clientSecret
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to set auth provider credentials');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to set auth provider credentials');
   }
 };
