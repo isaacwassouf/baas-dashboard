@@ -1,9 +1,9 @@
 import { API } from '$lib/api';
-import type { LogsList } from '$lib/types/analytics';
+import type { LogsList, Window } from '$lib/types/analytics';
 
-export const listLogs = async (): Promise<LogsList | undefined> => {
+export const listLogs = async (window: Window): Promise<LogsList | undefined> => {
   try {
-    const response = await API.get<LogsList>('/api/analytics');
+    const response = await API.get<LogsList>(`/api/analytics/?window=${window}`);
 
     if (response.status === 200) {
       return response.data;
