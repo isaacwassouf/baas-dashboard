@@ -213,12 +213,12 @@
 
 				<SidebarItem
 					label={'Logs'}
-					href={'comsthing'}
+					href={'/dashboard/logs'}
 					{spanClass}
 					activeClass="flex items-center p-2 text-base font-normal text-gray-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-primary-700"
 					on:click={toggleSide}
-					active={activeUrl === `comsthing`}
-					class="front-medium font-medium hover:bg-gray-200"
+					active={activeUrl === `logs`}
+					class={`font-medium hover:bg-gray-200 ${activeUrl.startsWith(`/dashboard/logs`) ? 'bg-gray-200 hover:bg-gray-300' : ''}`}
 				>
 					<svelte:fragment slot="icon">
 						<svg
