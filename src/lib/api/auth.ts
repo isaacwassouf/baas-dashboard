@@ -1,5 +1,5 @@
 import { API } from '$lib/api';
-import type { AuthProvider, AuthProvidersList } from '$lib/types/auth';
+import type { AuthProvider, AuthProvidersList, RegisterAdminData } from '$lib/types/auth';
 
 export const listAuthProviders = async (): Promise<AuthProvidersList | undefined> => {
   try {
@@ -61,5 +61,20 @@ export const setAuthProviderCredentials = async (authProvider: AuthProvider): Pr
   } catch (error) {
     console.error(error);
     throw new Error('Failed to set auth provider credentials');
+  }
+};
+
+export const registerAdmin = async (data: RegisterAdminData): Promise<void> => {
+  try {
+    const response = await API.post('/api/auth/admin/register', data);
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to register admin');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to register admin');
   }
 };

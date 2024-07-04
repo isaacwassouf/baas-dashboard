@@ -9,3 +9,9 @@ export interface AuthProvider {
 export interface AuthProvidersList {
   authProviders: AuthProvider[];
 }
+
+export interface RegisterAdminData {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+}
