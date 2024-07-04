@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { registerAdmin } from '$lib/api/auth';
-	import type { RegisterAdminData } from '$lib/types/auth';
+	import { loginAdmin } from '$lib/api/auth';
+	import type { LoginAdminData } from '$lib/types/auth';
 	import { A, Button, Card, Label, Input, Spinner, Alert } from 'flowbite-svelte';
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 
@@ -17,16 +17,15 @@
 
 	let submitting: boolean = false;
 	let submitError: boolean = false;
-	const data: RegisterAdminData = {
+	const data: LoginAdminData = {
 		email: '',
-		password: '',
-		passwordConfirmation: ''
+		password: ''
 	};
 
 	const onSubmit = async () => {
 		submitting = true;
 		try {
-			await registerAdmin(data);
+			await loginAdmin(data);
 			submitError = false;
 
 			goto('/dashboard/database/tables');
@@ -56,7 +55,7 @@
 		</a>
 
 		<Card class="w-full" size="md" border={false}>
-			<h1 class={cardH1Class}>Create Admin Account</h1>
+			<h1 class={cardH1Class}>Login to Admin Account</h1>
 			<form class="mt-8 space-y-6" on:submit|preventDefault={onSubmit}>
 				<div>
 					<Label class={labelClass}>
@@ -84,19 +83,6 @@
 						/>
 					</Label>
 				</div>
-				<div>
-					<Label class={labelClass}>
-						<span>Confirm password</span>
-						<Input
-							type="password"
-							name="confirm-password"
-							placeholder="••••••••"
-							required
-							class="border outline-none dark:border-gray-600 dark:bg-gray-700"
-							bind:value={data.passwordConfirmation}
-						/>
-					</Label>
-				</div>
 
 				{#if submitError}
 					<Alert color="red">
@@ -106,15 +92,17 @@
 					</Alert>
 				{/if}
 
-				<Button type="submit" size="lg">
+				<Button disabled={submitting} type="submit" size="lg">
 					{#if submitting}
 						<Spinner color="white" />
 					{/if}
 
-					Create account</Button
+					Login</Button
 				>
 				<div class={haveAccountDivClass}>
-					Already have an account? <A href="/authentication/login">Login here</A>
+					Didn't setup an account? <A href="/authentication/register"
+						>Register an admin account here</A
+					>
 				</div>
 			</form>
 		</Card>

@@ -15,3 +15,19 @@ export interface RegisterAdminData {
   password: string;
   passwordConfirmation: string;
 }
+
+export interface LoginAdminData {
+  email: string;
+  password: string;
+}
+
+export interface Admin {
+  id: number;
+  email: string;
+}
+
+export interface JWTAdminClaims {
+  admin: Admin;
+  exp: number;
+  iat: number;
+}

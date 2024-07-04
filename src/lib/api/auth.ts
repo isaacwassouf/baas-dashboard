@@ -1,5 +1,10 @@
 import { API } from '$lib/api';
-import type { AuthProvider, AuthProvidersList, RegisterAdminData } from '$lib/types/auth';
+import type {
+  AuthProvider,
+  AuthProvidersList,
+  LoginAdminData,
+  RegisterAdminData
+} from '$lib/types/auth';
 
 export const listAuthProviders = async (): Promise<AuthProvidersList | undefined> => {
   try {
@@ -76,5 +81,20 @@ export const registerAdmin = async (data: RegisterAdminData): Promise<void> => {
   } catch (error) {
     console.error(error);
     throw new Error('Failed to register admin');
+  }
+};
+
+export const loginAdmin = async (data: LoginAdminData): Promise<void> => {
+  try {
+    const response = await API.post('/api/auth/admin/login', data);
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to login admin');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to login admin');
   }
 };
