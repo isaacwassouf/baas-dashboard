@@ -23,8 +23,19 @@
 	import { onMount } from 'svelte';
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 
+	import { Drawer, CloseButton } from 'flowbite-svelte';
+	import { ArrowRightOutline } from 'flowbite-svelte-icons';
+	import { sineIn } from 'svelte/easing';
+	let logDrawerHidden = true;
+	let transitionParams = {
+		x: 320,
+		duration: 200,
+		easing: sineIn
+	};
+
 	let loadingLogs: boolean = false;
 	let logs: LogEntry[] = [];
+	let currentLogToShow: LogEntry | null = null;
 	let currentWindow: Window = Window.LAST_WEEK;
 
 	const changeWindow = async (window: Window) => {
@@ -33,6 +44,11 @@
 
 		processLogEntries(logs);
 		processPieChartData(logs);
+	};
+
+	const showLog = (log: LogEntry) => {
+		logDrawerHidden = false;
+		currentLogToShow = log;
 	};
 
 	const mapWindowToText = (window: Window) => {
@@ -390,7 +406,10 @@
 		</TableHead>
 		<TableBody tableBodyClass="divide-y bg-gray-50">
 			{#each logs as log}
-				<TableBodyRow class="bg-gray-50 hover:bg-gray-100">
+				<TableBodyRow
+					class="bg-gray-50 hover:cursor-pointer hover:bg-gray-100"
+					on:click={() => showLog(log)}
+				>
 					<TableBodyCell class="max-w-12">
 						{#if log.level === 'ERROR'}
 							<Badge color="red" rounded class="px-2.5 py-0.5">
@@ -424,4 +443,89 @@
 			{/each}
 		</TableBody>
 	</Table>
+
+	<Drawer
+		transitionType="fly"
+		{transitionParams}
+		bind:hidden={logDrawerHidden}
+		id="sidebar1"
+		placement="right"
+		class="w-1/3"
+	>
+		<div class="flex items-center">
+			<h5
+				id="drawer-label"
+				class="mb-4 inline-flex items-center text-base font-bold text-gray-500 dark:text-gray-400"
+			>
+				<InfoCircleSolid class="me-2.5 h-5 w-5" /> Log
+			</h5>
+			<CloseButton on:click={() => (logDrawerHidden = true)} class="mb-4 dark:text-white" />
+		</div>
+
+		<div>
+			<div class="mb-6 space-y-2">
+				<h5 class="text-sm font-semibold text-gray-600 dark:bg-gray-800 dark:text-white">Level</h5>
+
+				{#if currentLogToShow?.level === 'ERROR'}
+					<Badge color="red" rounded class="px-2.5 py-0.5">
+						<Indicator color="red" size="xs" class="me-1" />Error
+					</Badge>
+				{/if}
+
+				{#if currentLogToShow?.level === 'INFO'}
+					<Badge color="blue" rounded class="px-2.5 py-0.5">
+						<Indicator size="xs" class="me-1 bg-sky-600" />Info
+					</Badge>
+				{/if}
+			</div>
+
+			<div class="mb-6 space-y-2">
+				<h5 class="text-sm font-semibold text-gray-600 dark:bg-gray-800 dark:text-white">
+					Service
+				</h5>
+				{#if currentLogToShow?.service === 'schema-service'}
+					<Badge color="green" class="px-2.5 py-0.5">Schema Service</Badge>
+				{/if}
+
+				{#if currentLogToShow?.service === 'contents-service'}
+					<Badge color="blue" class="px-2.5 py-0.5">Contents Service</Badge>
+				{/if}
+
+				{#if currentLogToShow?.service === 'auth-service'}
+					<Badge color="purple" class="px-2.5 py-0.5">Auth Service</Badge>
+				{/if}
+			</div>
+
+			<div class="mb-6 space-y-2">
+				<h5 class="text-sm font-semibold text-gray-600 dark:bg-gray-800 dark:text-white">
+					Message
+				</h5>
+				<p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+					{currentLogToShow?.message}
+				</p>
+			</div>
+
+			<div class="mb-6 space-y-2">
+				<h5 class="text-sm font-semibold text-gray-600 dark:bg-gray-800 dark:text-white">
+					Metadata
+				</h5>
+
+				<pre
+					class="scrollbar mt-8 overflow-x-scroll rounded-md bg-gray-100 p-4 text-gray-600 dark:bg-gray-800">{JSON.stringify(
+						JSON.parse(currentLogToShow?.metaData ?? ''),
+						null,
+						2
+					)}</pre>
+			</div>
+
+			<div class="mb-6 space-y-2">
+				<h5 class="text-sm font-semibold text-gray-600 dark:bg-gray-800 dark:text-white">
+					Created At
+				</h5>
+				<p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+					{currentLogToShow?.createdAt}
+				</p>
+			</div>
+		</div></Drawer
+	>
 {/if}
