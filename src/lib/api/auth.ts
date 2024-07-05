@@ -98,3 +98,18 @@ export const loginAdmin = async (data: LoginAdminData): Promise<void> => {
     throw new Error('Failed to login admin');
   }
 };
+
+export const logoutAdmin = async (): Promise<void> => {
+  try {
+    const response = await API.post('/api/auth/admin/logout');
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to logout admin');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to logout admin');
+  }
+};

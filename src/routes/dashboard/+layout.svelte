@@ -2,12 +2,8 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import {
-		DarkMode,
 		Navbar,
 		NavBrand,
-		NavLi,
-		NavUl,
-		NavHamburger,
 		Sidebar,
 		SidebarGroup,
 		SidebarItem,
@@ -15,8 +11,12 @@
 		Drawer,
 		CloseButton
 	} from 'flowbite-svelte';
-	import { Cog } from 'svelte-heros-v2';
+	import { CodeBracket } from 'svelte-heros-v2';
 	import { sineIn } from 'svelte/easing';
+	import { logoutAdmin } from '$lib/api/auth';
+	import { goto } from '$app/navigation';
+
+	const adminData = $page.data.admin;
 
 	let transitionParams = {
 		x: -320,
@@ -29,6 +29,11 @@
 	let backdrop: boolean = false;
 	let activateClickOutside = true;
 	let drawerHidden: boolean = false;
+	let spanClass = 'pl-2 self-center text-md text-gray-900 whitespace-nowrap dark:text-white';
+	let loggingOut: boolean = false;
+
+	$: activeUrl = $page.url.pathname;
+
 	$: if (width >= breakPoint) {
 		drawerHidden = false;
 		activateClickOutside = false;
@@ -36,6 +41,26 @@
 		drawerHidden = true;
 		activateClickOutside = true;
 	}
+
+	const toggleSide = () => {
+		if (width < breakPoint) {
+			drawerHidden = !drawerHidden;
+		}
+	};
+
+	const handleLogout = async () => {
+		loggingOut = true;
+		try {
+			await logoutAdmin();
+
+			goto('/authentication/login');
+		} catch (e) {
+			console.log(e);
+		} finally {
+			loggingOut = false;
+		}
+	};
+
 	onMount(() => {
 		if (width >= breakPoint) {
 			drawerHidden = false;
@@ -45,55 +70,40 @@
 			activateClickOutside = true;
 		}
 	});
-	const toggleSide = () => {
-		if (width < breakPoint) {
-			drawerHidden = !drawerHidden;
-		}
-	};
-	const toggleDrawer = () => {
-		drawerHidden = false;
-	};
-	$: activeUrl = $page.url.pathname;
-	let spanClass = 'pl-2 self-center text-md text-gray-900 whitespace-nowrap dark:text-white';
-	let divClass = 'w-full ml-auto lg:block lg:w-auto order-1 lg:order-none';
-	let ulClass =
-		'flex flex-col py-3 my-4 lg:flex-row lg:my-0 text-sm font-medium gap-4 dark:lg:bg-transparent lg:bg-white lg:border-0';
 </script>
 
 <svelte:window bind:innerWidth={width} />
 <header class="mx-auto w-full flex-none bg-white dark:bg-slate-950">
-	<Navbar let:hidden let:toggle>
-		<NavHamburger
-			on:click={toggleDrawer}
-			btnClass="focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 m-0 mr-3 lg:hidden"
-		/>
+	<Navbar class="p-6">
 		<NavBrand href="/" class="lg:ml-64">
-			<Cog />
-			<span class="self-center whitespace-nowrap pl-4 text-xl font-semibold dark:text-white">
-				My Website
+			<CodeBracket />
+			<span class="self-center whitespace-nowrap pl-4 text-xl font-bold dark:text-white">
+				Dashboard
 			</span>
 		</NavBrand>
-		<NavUl
-			{hidden}
-			{divClass}
-			{ulClass}
-			nonActiveClass="md:!pl-3 md:!py-2 lg:!pl-0 text-gray-700 hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 dark:text-white lg:dark:hover:text-primary-700 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
-			activeClass="md:!pl-3 md:!py-2 lg:!pl-0 lg:text-primary-700 text-white dark:text-white dark:lg:text-primary-500 bg-primary-700 lg:bg-transparent dark:bg-primary-600 lg:dark:bg-transparent cursor-default"
-		>
-			<NavLi class="lg:mb-0 lg:px-2" active={activeUrl === '/'} href="/">Home</NavLi>
-			<NavLi class="lg:mb-0 lg:px-2" active={activeUrl === '/pages/about'} href="/pages/about"
-				>About</NavLi
-			>
-			<NavLi
-				class="lg:mb-0 lg:px-2"
-				href="https://github.com/shinokada/flowbite-sveltekit-responsive-sidebar-layout"
-				>GitHub</NavLi
-			>
-		</NavUl>
 		<div class="ml-auto flex items-center">
-			<DarkMode class="inline-block hover:text-gray-900 dark:hover:text-white" />
+			<div class="mr-2 flex items-center justify-start">
+				<div class="flex flex-col items-start">
+					<span class="block truncate text-xs font-medium">{adminData?.email}</span>
+				</div>
+			</div>
+
+			<button on:click={() => handleLogout()} class="rounded-md p-2 hover:bg-gray-200">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5 text-gray-600 dark:text-white"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					fill="none"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path
+						d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2"
+					/><path d="M15 12h-12l3 -3" /><path d="M6 15l-3 -3" /></svg
+				>
+			</button>
 		</div>
-		<NavHamburger on:click={toggle} btnClass="lg:hidden" />
 	</Navbar>
 </header>
 
@@ -104,7 +114,7 @@
 	bind:hidden={drawerHidden}
 	bind:activateClickOutside
 	width="w-64"
-	class="z-30 overflow-scroll border-r-2 bg-gray-100 pb-32"
+	class="z-30 overflow-scroll border-r-2 bg-gray-100 pb-32 dark:border-r-gray-600"
 	id="sidebar"
 >
 	<div class="flex items-center">
@@ -238,7 +248,7 @@
 	</Sidebar>
 </Drawer>
 
-<div class="mx-auto flex w-full px-2">
+<div class="mx-auto flex w-full px-2 dark:bg-gray-800">
 	<main class="mx-auto w-full p-8 lg:ml-72">
 		<slot />
 	</main>
