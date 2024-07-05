@@ -79,7 +79,7 @@
 							placeholder="••••••••"
 							required
 							class="border outline-none dark:border-gray-600 dark:bg-gray-700"
-							bind:avalue={data.password}
+							bind:value={data.password}
 						/>
 					</Label>
 				</div>
@@ -88,7 +88,7 @@
 					<Alert color="red">
 						<InfoCircleSolid slot="icon" class="h-5 w-5" />
 						<span class="font-medium">Submitting error.</span>
-						<span class="block sm:inline">Failed to create the admin account.</span>
+						<span class="block sm:inline">Failed to login to the admin account.</span>
 					</Alert>
 				{/if}
 

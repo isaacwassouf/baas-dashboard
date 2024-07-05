@@ -80,7 +80,7 @@
 							placeholder="••••••••"
 							required
 							class="border outline-none dark:border-gray-600 dark:bg-gray-700"
-							bind:avalue={data.password}
+							bind:value={data.password}
 						/>
 					</Label>
 				</div>
