@@ -11,7 +11,7 @@
 		Spinner,
 		Toggle
 	} from 'flowbite-svelte';
-	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
+	import { ChevronDown, ChevronUp, Envelope } from 'svelte-heros-v2';
 	import {
 		enableAuthProvider,
 		listAuthProviders,
@@ -22,6 +22,7 @@
 	import type { AuthProvider } from '$lib/types/auth';
 	import GoogleIcon from '$lib/components/shared/icons/google.svelte';
 	import { onMount } from 'svelte';
+	import { EnvelopeSolid, GithubSolid } from 'flowbite-svelte-icons';
 
 	let loadingAuthProviders: boolean = false;
 	let settingCredentials: boolean = false;
@@ -138,6 +139,51 @@
 	<Spinner />
 {:else}
 	<Accordion>
+		<AccordionItem>
+			<span slot="header" class="flex items-center gap-2">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class="size-5 text-gray-600 dark:text-gray-500"
+				>
+					<path
+						d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"
+					/>
+					<path
+						d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"
+					/>
+				</svg>
+				Email
+			</span>
+
+			<div class="flex items-center gap-1">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class="size-4"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M11.484 2.17a.75.75 0 0 1 1.032 0 11.209 11.209 0 0 0 7.877 3.08.75.75 0 0 1 .722.515 12.74 12.74 0 0 1 .635 3.985c0 5.942-4.064 10.933-9.563 12.348a.749.749 0 0 1-.374 0C6.314 20.683 2.25 15.692 2.25 9.75c0-1.39.223-2.73.635-3.985a.75.75 0 0 1 .722-.516l.143.001c2.996 0 5.718-1.17 7.734-3.08ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75ZM12 15a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75H12Z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+				<p class="text-sm font-semibold text-gray-500 dark:text-gray-400">
+					Email and password authentication is enabled, and can't be disabled.
+				</p>
+			</div>
+
+			<div slot="arrowup" class="flex items-center gap-4">
+				<ChevronUp class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+			</div>
+
+			<div slot="arrowdown" class="flex items-center gap-4">
+				<ChevronDown class="h-4 w-4 text-gray-500 dark:text-gray-400" />
+			</div>
+		</AccordionItem>
+
 		{#each authProviders as authProvider (authProvider.id)}
 			<AccordionItem>
 				<span slot="header" class="flex items-center gap-2">
