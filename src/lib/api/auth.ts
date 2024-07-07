@@ -3,7 +3,8 @@ import type {
   AuthProvider,
   AuthProvidersList,
   LoginAdminData,
-  RegisterAdminData
+  RegisterAdminData,
+  UsersList
 } from '$lib/types/auth';
 
 export const listAuthProviders = async (): Promise<AuthProvidersList | undefined> => {
@@ -111,5 +112,20 @@ export const logoutAdmin = async (): Promise<void> => {
   } catch (error) {
     console.error(error);
     throw new Error('Failed to logout admin');
+  }
+};
+
+export const listUsers = async (): Promise<UsersList | undefined> => {
+  try {
+    const response = await API.get<UsersList>('/api/auth/users');
+
+    if (response.status === 200) {
+      return response.data;
+    }
+
+    return Promise.reject('Failed to fetch users list');
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to fetch users list');
   }
 };
