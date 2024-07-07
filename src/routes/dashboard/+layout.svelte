@@ -36,6 +36,8 @@
 
 	$: activeUrl = $page.url.pathname;
 
+	$: authenticationActive = activeUrl.startsWith(`/dashboard/authentication`);
+
 	$: if (width >= breakPoint) {
 		drawerHidden = false;
 		activateClickOutside = false;
@@ -201,6 +203,7 @@
 				<SidebarDropdownWrapper
 					label="Authentication"
 					class={`font-medium hover:bg-gray-200 ${activeUrl.startsWith(`/dashboard/authentication`) ? 'bg-gray-200 hover:bg-gray-300' : ''}`}
+					isOpen={authenticationActive}
 				>
 					<svelte:fragment slot="icon">
 						<svg
