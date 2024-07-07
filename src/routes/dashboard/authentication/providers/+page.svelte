@@ -11,7 +11,7 @@
 		Spinner,
 		Toggle
 	} from 'flowbite-svelte';
-	import { ChevronDown, ChevronUp, Envelope } from 'svelte-heros-v2';
+	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
 	import {
 		enableAuthProvider,
 		listAuthProviders,
@@ -22,7 +22,6 @@
 	import type { AuthProvider } from '$lib/types/auth';
 	import GoogleIcon from '$lib/components/shared/icons/google.svelte';
 	import { onMount } from 'svelte';
-	import { EnvelopeSolid, GithubSolid } from 'flowbite-svelte-icons';
 
 	let loadingAuthProviders: boolean = false;
 	let settingCredentials: boolean = false;
