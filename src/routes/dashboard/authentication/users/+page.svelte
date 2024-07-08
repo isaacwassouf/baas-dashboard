@@ -14,7 +14,7 @@
 	import { onMount } from 'svelte';
 	import { listUsers } from '$lib/api/auth';
 	import Google from '$lib/components/shared/icons/google.svelte';
-	import { EnvelopeSolid } from 'flowbite-svelte-icons';
+	import { EnvelopeSolid, GithubSolid } from 'flowbite-svelte-icons';
 
 	let loading: boolean = false;
 	let users: User[] | undefined = [];
@@ -78,6 +78,8 @@
 								<EnvelopeSolid class="size-5 text-gray-600" />
 							{:else if user.authProvider === 'google'}
 								<Google svgClass="size-5" />
+							{:else if user.authProvider === 'github'}
+								<GithubSolid class="size-5 text-gray-600" />
 							{/if}
 						</TableBodyCell>
 						<TableBodyCell>{user.createdAt}</TableBodyCell>

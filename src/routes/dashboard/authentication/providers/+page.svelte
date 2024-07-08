@@ -22,6 +22,7 @@
 	import type { AuthProvider } from '$lib/types/auth';
 	import GoogleIcon from '$lib/components/shared/icons/google.svelte';
 	import { onMount } from 'svelte';
+	import { GithubSolid } from 'flowbite-svelte-icons';
 
 	let loadingAuthProviders: boolean = false;
 	let settingCredentials: boolean = false;
@@ -188,6 +189,9 @@
 				<span slot="header" class="flex items-center gap-2">
 					{#if authProvider.name === 'google'}
 						<GoogleIcon />
+						{capitalizeFirstLetter(authProvider.name)}
+					{:else}
+						<GithubSolid class="text-gray-600" />
 						{capitalizeFirstLetter(authProvider.name)}
 					{/if}
 				</span>
