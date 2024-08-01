@@ -5,7 +5,6 @@
 	import { onMount } from 'svelte';
 	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
 	import toast from 'svelte-french-toast';
-	import { CheckCircleSolid } from 'flowbite-svelte-icons';
 	import ToastSuccessIcon from '../shared/icons/ToastSuccessIcon.svelte';
 
 	export let templateType: EmailTemplateEnum;
