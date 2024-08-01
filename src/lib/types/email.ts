@@ -1,7 +1,7 @@
 export enum EmailTemplateEnum {
-  EMAIL_VERIFICATION,
-  MFA_VERIFICATION,
-  PASSWORD_RESET
+  EMAIL_VERIFICATION = 'email-verification',
+  MFA_VERIFICATION = 'mfa-verification',
+  PASSWORD_RESET = 'password-reset'
 }
 
 export interface SMTPData {
@@ -10,4 +10,10 @@ export interface SMTPData {
   username: string;
   password: string;
   sender: string;
+}
+
+export interface EmailTemplate {
+  subject: string;
+  body: string;
+  redirectUrl: string;
 }

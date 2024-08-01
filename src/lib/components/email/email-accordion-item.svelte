@@ -1,22 +1,38 @@
 <script lang="ts">
-	import { EmailTemplateEnum } from '$lib/types/email';
+	import { getEmailTemplates } from '$lib/api/email';
+	import { EmailTemplateEnum, type EmailTemplate } from '$lib/types/email';
 	import { AccordionItem, Label, Input, Button, Spinner, Textarea } from 'flowbite-svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
 
 	export let templateType: EmailTemplateEnum;
 	export let title: string;
 	export let saving: boolean = false;
 
-	let subject: string;
-	let rediectURL: string;
-	let body: string;
+	let emailTemplate: EmailTemplate = {
+		subject: '',
+		body: '',
+		redirectUrl: ''
+	};
 
 	const dispatch = createEventDispatcher();
 
 	const handleSave = () => {
-		dispatch('save', { templateType, subject, rediectURL, body });
+		dispatch('save', { templateType, emailTemplate });
 	};
+
+	const loadTemplate = async () => {
+		try {
+			const result: EmailTemplate = await getEmailTemplates(templateType);
+			emailTemplate = result;
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	onMount(async () => {
+		await loadTemplate();
+	});
 </script>
 
 <AccordionItem>
@@ -41,7 +57,13 @@
 		<Label class="space-y-1">
 			<span>Subject</span> <br />
 			<small class="text-gray-500">This is the email subject</small>
-			<Input type="text" name="subject" placeholder="Email subject" required bind:value={subject} />
+			<Input
+				type="text"
+				name="subject"
+				placeholder="Email subject"
+				required
+				bind:value={emailTemplate.subject}
+			/>
 		</Label>
 
 		<Label class="space-y-1">
@@ -49,7 +71,7 @@
 			<small class="text-gray-500">
 				This is the rediect URL the link in the email would go to.</small
 			>
-			<Input type="url" name="redirectURL" required bind:value={rediectURL} />
+			<Input type="url" name="redirectURL" required bind:value={emailTemplate.redirectUrl} />
 		</Label>
 
 		<Label class="space-y-1">
@@ -60,7 +82,7 @@
 				name="body"
 				placeholder="Email body"
 				required
-				bind:value={body}
+				bind:value={emailTemplate.body}
 				rows="4"
 			/>
 		</Label>
