@@ -1,32 +1,51 @@
 <script lang="ts">
-	import { getEmailTemplates } from '$lib/api/email';
+	import { getEmailTemplate, setEmailTemplate } from '$lib/api/email';
 	import { EmailTemplateEnum, type EmailTemplate } from '$lib/types/email';
 	import { AccordionItem, Label, Input, Button, Spinner, Textarea } from 'flowbite-svelte';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
+	import toast from 'svelte-french-toast';
+	import { CheckCircleSolid } from 'flowbite-svelte-icons';
+	import ToastSuccessIcon from '../shared/icons/ToastSuccessIcon.svelte';
 
 	export let templateType: EmailTemplateEnum;
 	export let title: string;
-	export let saving: boolean = false;
 
+	let saving: boolean = false;
 	let emailTemplate: EmailTemplate = {
 		subject: '',
 		body: '',
 		redirectUrl: ''
 	};
 
-	const dispatch = createEventDispatcher();
-
-	const handleSave = () => {
-		dispatch('save', { templateType, emailTemplate });
-	};
-
 	const loadTemplate = async () => {
 		try {
-			const result: EmailTemplate = await getEmailTemplates(templateType);
+			const result: EmailTemplate = await getEmailTemplate(templateType);
 			emailTemplate = result;
 		} catch (e) {
 			console.log(e);
+		}
+	};
+
+	const saveTemplate = async () => {
+		saving = true;
+		try {
+			await setEmailTemplate(templateType, emailTemplate);
+
+			toast.success('Template saved successfully', {
+				position: 'bottom-right',
+				duration: 3000,
+				icon: ToastSuccessIcon
+			});
+		} catch (e) {
+			console.log(e);
+
+			toast.error('Failed to save template', {
+				position: 'bottom-right',
+				duration: 3000
+			});
+		} finally {
+			saving = false;
 		}
 	};
 
@@ -53,7 +72,7 @@
 		{title}
 	</span>
 
-	<form class="mb-4 flex w-1/2 flex-col space-y-6">
+	<form class="mb-4 flex w-2/3 flex-col space-y-6">
 		<Label class="space-y-1">
 			<span>Subject</span> <br />
 			<small class="text-gray-500">This is the email subject</small>
@@ -80,14 +99,14 @@
 			<Textarea
 				id="body"
 				name="body"
+				rows="25"
 				placeholder="Email body"
 				required
 				bind:value={emailTemplate.body}
-				rows="4"
 			/>
 		</Label>
 
-		<Button color="green" size="xs" class="w-1/6" on:click={() => handleSave()}>
+		<Button color="green" size="xs" class="w-1/6" on:click={() => saveTemplate()}>
 			{#if saving}
 				<Spinner color="white" class="mr-2 h-4 w-4" />
 			{/if}
