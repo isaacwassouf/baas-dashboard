@@ -24,7 +24,6 @@
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 
 	import { Drawer, CloseButton } from 'flowbite-svelte';
-	import { ArrowRightOutline } from 'flowbite-svelte-icons';
 	import { sineIn } from 'svelte/easing';
 	let logDrawerHidden = true;
 	let transitionParams = {

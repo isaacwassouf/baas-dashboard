@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
 	import toast from 'svelte-french-toast';
-	import ToastSuccessIcon from '../shared/icons/ToastSuccessIcon.svelte';
+	import ToastSuccessIcon from '$lib/components/shared/icons/ToastSuccessIcon.svelte';
 
 	export let templateType: EmailTemplateEnum;
 	export let title: string;
