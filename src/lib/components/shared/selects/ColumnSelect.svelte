@@ -39,7 +39,11 @@
 	// reload the columns when the table name changes
 	$: if (tableName) {
 		currentValue = null;
-		loadColumns();
+		if (tableName !== 'users') {
+			loadColumns();
+		} else {
+			columns = [{ value: 'id', label: 'id' }];
+		}
 	}
 </script>
 

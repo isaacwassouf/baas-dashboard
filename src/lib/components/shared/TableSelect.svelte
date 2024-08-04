@@ -27,6 +27,11 @@
 			} else {
 				tables = [];
 			}
+			// push the users table
+			tables.push({
+				value: 'users',
+				label: 'users'
+			});
 		} catch (error) {
 			console.error(error);
 			tables = [];

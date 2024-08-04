@@ -78,6 +78,7 @@
 			<span class="text-gray-900">Table columns</span> <span class="text-red-500">*</span> <br />
 			<small class="text-gray-500"
 				><Badge color="red">id</Badge>
+				<Badge color="red">creator_id</Badge>
 				<Badge color="red">created_at</Badge>
 				<Badge color="red">updated_at</Badge>
 				columns are reserved.</small
@@ -97,6 +98,19 @@
 					<AddColumnItem
 						columnDetails={{
 							columnName: 'id',
+							columnType: 'uint64',
+							columnDefault: '',
+							isUnique: true,
+							isNotNullable: true,
+							columnLength: 0
+						}}
+						index={0}
+						isSystemColumn={true}
+					/>
+
+					<AddColumnItem
+						columnDetails={{
+							columnName: 'creator_id',
 							columnType: 'uint64',
 							columnDefault: '',
 							isUnique: true,
