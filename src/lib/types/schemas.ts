@@ -66,4 +66,6 @@ export interface ColumnTypeSelectOptionItem {
 
 export interface NewColumnDetails extends ColumnDetails {
   columnLength: number;
+  columnPrecision: number;
+  columnScale: number;
 }

@@ -20,7 +20,9 @@
 		columnDefault: '',
 		isUnique: false,
 		isNotNullable: false,
-		columnLength: 0
+		columnLength: 0,
+		columnPrecision: 0,
+		columnScale: 0
 	};
 
 	let addingColumn: boolean = false;
@@ -33,7 +35,9 @@
 			columnDefault: '',
 			isUnique: false,
 			isNotNullable: false,
-			columnLength: 0
+			columnLength: 0,
+			columnPrecision: 0,
+			columnScale: 0
 		};
 	};
 
@@ -63,6 +67,13 @@
 			addingColumn = false;
 		}
 	};
+
+	$: {
+		if (!open) {
+			resetData();
+			addingColumnError = false;
+		}
+	}
 </script>
 
 <Modal bind:open {size} autoclose={false} class="w-full">
@@ -101,6 +112,43 @@
 						name="length"
 						bind:value={newColumnDetails.columnLength}
 						placeholder="length"
+						required
+					/>
+				{/if}
+
+				{#if newColumnDetails.columnType === 'decimal'}
+					<Input
+						class="basis-1/4"
+						type="number"
+						min="0"
+						max="65535"
+						name="length"
+						bind:value={newColumnDetails.columnPrecision}
+						placeholder="precision"
+						required
+					/>
+
+					<Input
+						class="basis-1/4"
+						type="number"
+						min="0"
+						max="65535"
+						name="length"
+						bind:value={newColumnDetails.columnScale}
+						placeholder="scale"
+						required
+					/>
+				{/if}
+
+				{#if newColumnDetails.columnType === 'float' || newColumnDetails.columnType === 'double'}
+					<Input
+						class="basis-1/4"
+						type="number"
+						min="0"
+						max="65535"
+						name="length"
+						bind:value={newColumnDetails.columnPrecision}
+						placeholder="precision"
 						required
 					/>
 				{/if}

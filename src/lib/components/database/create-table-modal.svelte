@@ -28,7 +28,9 @@
 				columnDefault: '',
 				isUnique: false,
 				isNotNullable: false,
-				columnLength: 0
+				columnLength: 0,
+				columnPrecision: 0,
+				columnScale: 0
 			});
 			return columns;
 		});
@@ -102,7 +104,9 @@
 							columnDefault: '',
 							isUnique: true,
 							isNotNullable: true,
-							columnLength: 0
+							columnLength: 0,
+							columnPrecision: 0,
+							columnScale: 0
 						}}
 						index={0}
 						isSystemColumn={true}
@@ -115,7 +119,9 @@
 							columnDefault: '',
 							isUnique: true,
 							isNotNullable: true,
-							columnLength: 0
+							columnLength: 0,
+							columnPrecision: 0,
+							columnScale: 0
 						}}
 						index={0}
 						isSystemColumn={true}
@@ -132,7 +138,9 @@
 							columnDefault: 'CURRENT_TIMESTAMP',
 							isUnique: false,
 							isNotNullable: true,
-							columnLength: 0
+							columnLength: 0,
+							columnPrecision: 0,
+							columnScale: 0
 						}}
 						index={0}
 						isSystemColumn={true}
@@ -145,7 +153,9 @@
 							columnDefault: 'CURRENT_TIMESTAMP',
 							isUnique: false,
 							isNotNullable: true,
-							columnLength: 0
+							columnLength: 0,
+							columnPrecision: 0,
+							columnScale: 0
 						}}
 						index={0}
 						isSystemColumn={true}

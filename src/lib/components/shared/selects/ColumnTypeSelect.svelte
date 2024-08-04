@@ -19,8 +19,12 @@
 		{ value: 'int32', label: 'int32', root: 'numerical' },
 		{ value: 'int64', label: 'int64', root: 'numerical' },
 		{ value: 'varchar', label: 'varchar', root: 'string' },
+		{ value: 'text', label: 'text', root: 'string' },
 		{ value: 'timestamp', label: 'timestamp', root: 'date' },
-		{ value: 'boolean', label: 'boolean', root: 'boolean' }
+		{ value: 'boolean', label: 'boolean', root: 'boolean' },
+		{ value: 'float', label: 'float', root: 'numerical' },
+		{ value: 'double', label: 'double', root: 'numerical' },
+		{ value: 'decimal', label: 'decimal', root: 'numerical' }
 	];
 
 	const groupByRoot = (item: ColumnTypeSelectOptionItem) => item.root;

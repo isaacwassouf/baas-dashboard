@@ -49,6 +49,43 @@
 					disabled={isSystemColumn}
 				/>
 			{/if}
+
+			{#if columnDetails.columnType === 'decimal'}
+				<Input
+					class="basis-1/4"
+					type="number"
+					min="0"
+					max="65535"
+					name="length"
+					bind:value={columnDetails.columnPrecision}
+					placeholder="precision"
+					required
+				/>
+
+				<Input
+					class="basis-1/4"
+					type="number"
+					min="0"
+					max="65535"
+					name="length"
+					bind:value={columnDetails.columnScale}
+					placeholder="scale"
+					required
+				/>
+			{/if}
+
+			{#if columnDetails.columnType === 'float' || columnDetails.columnType === 'double'}
+				<Input
+					class="basis-1/4"
+					type="number"
+					min="0"
+					max="65535"
+					name="length"
+					bind:value={columnDetails.columnPrecision}
+					placeholder="precision"
+					required
+				/>
+			{/if}
 		</div>
 	</TableBodyCell>
 
