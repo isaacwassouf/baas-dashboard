@@ -24,10 +24,11 @@ export interface LoginAdminData {
 export interface Admin {
   id: number;
   email: string;
+  is_admin: boolean;
 }
 
 export interface JWTAdminClaims {
-  admin: Admin;
+  user: Admin;
   exp: number;
   iat: number;
 }

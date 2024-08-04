@@ -5,7 +5,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 import type { JWTAdminClaims } from '$lib/types/auth';
 
 export const authenticate: Handle = async ({ event, resolve }) => {
-  const authToken = event.cookies.get('token');
+  const authToken = event.cookies.get('accessToken');
   try {
     if (!authToken) event.locals.admin = undefined;
 
@@ -14,8 +14,8 @@ export const authenticate: Handle = async ({ event, resolve }) => {
 
     if (authToken && claims) {
       event.locals.admin = {
-        id: claims.admin.id,
-        email: claims.admin.email
+        id: claims.user.id,
+        email: claims.user.email
       };
     }
   } finally {

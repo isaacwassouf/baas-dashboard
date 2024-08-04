@@ -7,7 +7,7 @@ declare global {
   namespace App {
     // interface Error {}
     interface Locals {
-      admin: Admin | undefined;
+      admin: Omit<Admin, 'is_admin'> | undefined;
     }
     // interface PageData {}
     // interface PageState {}
