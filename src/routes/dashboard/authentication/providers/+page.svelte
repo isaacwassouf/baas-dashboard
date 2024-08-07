@@ -231,11 +231,11 @@
 							provider redirect config
 						</small>
 						<Input
-							id="redirect"
 							type="text"
-							disabled
-							class="disabled:cursor-pointer"
-							value={`<api-gateway-domain>/api/auth/${authProvider.name}/callback`}
+							name="redirectURI"
+							required
+							placeholder="The redirect URI of your Google OpenID Connect application"
+							bind:value={authProvider.redirectURI}
 						/>
 					</Label>
 

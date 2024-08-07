@@ -56,7 +56,8 @@ export const setAuthProviderCredentials = async (authProvider: AuthProvider): Pr
   try {
     const response = await API.patch(`/api/auth/providers/${authProvider.id}/credentials`, {
       clientId: authProvider.clientId,
-      clientSecret: authProvider.clientSecret
+      clientSecret: authProvider.clientSecret,
+      redirectURI: authProvider.redirectURI
     });
 
     if (response.status === 200) {

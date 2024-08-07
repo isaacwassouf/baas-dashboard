@@ -4,6 +4,7 @@ export interface AuthProvider {
   active: boolean;
   clientId: string;
   clientSecret: string;
+  redirectURI: string;
 }
 
 export interface AuthProvidersList {

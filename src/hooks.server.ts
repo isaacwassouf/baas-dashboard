@@ -1,4 +1,4 @@
-import { JWT_SECRET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import jwt from 'jsonwebtoken';
 import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -6,10 +6,11 @@ import type { JWTAdminClaims } from '$lib/types/auth';
 
 export const authenticate: Handle = async ({ event, resolve }) => {
   const authToken = event.cookies.get('accessToken');
+  console.log('authToken', authToken);
   try {
     if (!authToken) event.locals.admin = undefined;
 
-    const claims = jwt.verify(authToken ?? '', JWT_SECRET) as JWTAdminClaims;
+    const claims = jwt.verify(authToken ?? '', env.JWT_SECRET) as JWTAdminClaims;
     if (!claims) event.locals.admin = undefined;
 
     if (authToken && claims) {
