@@ -198,9 +198,17 @@
 				<form class="mb-4 flex w-1/2 flex-col space-y-6">
 					<Label class="space-y-1">
 						<span>Client ID</span> <br />
-						<small class="text-gray-500">
-							This is the client ID of your Google OAuth2 application</small
-						>
+
+						{#if authProvider.name === 'google'}
+							<small class="text-gray-500">
+								This is the client ID of your Google OIDC application</small
+							>
+						{:else}
+							<small class="text-gray-500">
+								This is the client ID of your GitHub OAuth2 application</small
+							>
+						{/if}
+
 						<Input
 							type="text"
 							name="clientID"
@@ -212,9 +220,15 @@
 
 					<Label class="space-y-1">
 						<span>Client Secret</span> <br />
-						<small class="text-gray-500">
-							This is the client secret of your Google OAuth2 application
-						</small>
+						{#if authProvider.name === 'google'}
+							<small class="text-gray-500">
+								This is the client secret of your Google OIDC application</small
+							>
+						{:else}
+							<small class="text-gray-500">
+								This is the client secret of your GitHub OAuth2 application</small
+							>
+						{/if}
 						<Input
 							type="password"
 							name="ClientSecret"
@@ -226,10 +240,19 @@
 
 					<Label class="space-y-1">
 						<span>Rediect URI</span> <br />
-						<small class="leading-normal text-gray-500">
-							This is the redirect URI of your Google OAuth2 application. Paste this URI in the
-							provider redirect config
-						</small>
+
+						{#if authProvider.name === 'google'}
+							<small class="leading-normal text-gray-500">
+								This is the redirect URI of your Google OIDC application. Paste this URI in the
+								provider redirect config
+							</small>
+						{:else}
+							<small class="leading-normal text-gray-500">
+								This is the redirect URI of your GitHub OAuth2 application. Paste this URI in the
+								provider redirect config
+							</small>
+						{/if}
+
 						<Input
 							type="text"
 							name="redirectURI"
