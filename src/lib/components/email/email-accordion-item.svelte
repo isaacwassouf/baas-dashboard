@@ -6,6 +6,8 @@
 	import { ChevronDown, ChevronUp } from 'svelte-heros-v2';
 	import toast from 'svelte-french-toast';
 	import ToastSuccessIcon from '$lib/components/shared/icons/ToastSuccessIcon.svelte';
+	import CodeMirror from 'svelte-codemirror-editor';
+	import { html } from '@codemirror/lang-html';
 
 	export let templateType: EmailTemplateEnum;
 	export let title: string;
@@ -95,14 +97,7 @@
 		<Label class="space-y-1">
 			<span>Body</span> <br />
 			<small class="leading-normal text-gray-500"> This is the body of the email</small>
-			<Textarea
-				id="body"
-				name="body"
-				rows="25"
-				placeholder="Email body"
-				required
-				bind:value={emailTemplate.body}
-			/>
+			<CodeMirror bind:value={emailTemplate.body} lang={html()} />
 		</Label>
 
 		<Button color="green" size="xs" class="w-1/6" on:click={() => saveTemplate()}>

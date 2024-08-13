@@ -8,5 +8,8 @@ export default defineConfig({
   },
   preview: {
     port: 5173
+  },
+  optimizeDeps: {
+    exclude: ['svelte-codemirror-editor', 'codemirror', '@codemirror/lang-html']
   }
 });
