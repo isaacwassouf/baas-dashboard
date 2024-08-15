@@ -434,6 +434,10 @@
 						{#if log.service === 'auth-service'}
 							<Badge color="purple" class="px-2.5 py-0.5">Auth Service</Badge>
 						{/if}
+
+						{#if log.service === 'email-service'}
+							<Badge color="yellow" class="px-2.5 py-0.5">Auth Service</Badge>
+						{/if}
 					</TableBodyCell>
 					<TableBodyCell class="max-w-24 overflow-hidden">{log.message}</TableBodyCell>
 					<TableBodyCell class="max-w-56 overflow-hidden">{log.metaData}</TableBodyCell>
