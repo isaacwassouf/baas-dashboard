@@ -172,7 +172,7 @@
 
 	const pieOptions: ApexOptions = {
 		series: [],
-		colors: ['#86efac', '#7dd3fc', '#d8b4fe'],
+		colors: ['#86efac', '#7dd3fc', '#d8b4fe', '#fde047'],
 		chart: {
 			height: '250px',
 			width: '100%',
@@ -436,7 +436,7 @@
 						{/if}
 
 						{#if log.service === 'email-service'}
-							<Badge color="yellow" class="px-2.5 py-0.5">Auth Service</Badge>
+							<Badge color="yellow" class="px-2.5 py-0.5">Email Service</Badge>
 						{/if}
 					</TableBodyCell>
 					<TableBodyCell class="max-w-24 overflow-hidden">{log.message}</TableBodyCell>
