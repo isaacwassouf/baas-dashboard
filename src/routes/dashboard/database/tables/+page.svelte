@@ -20,6 +20,7 @@
 
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { DotsVerticalOutline } from 'flowbite-svelte-icons';
+	import ToastSuccessIcon from '$lib/components/shared/icons/ToastSuccessIcon.svelte';
 
 	let loading: boolean = false;
 	let tableDetails: TableDetails[] | undefined = [];
@@ -48,16 +49,13 @@
 		confirmDeletionModalOpen = true;
 	};
 
-	onMount(async () => {
-		await loadTables();
-	});
-
 	const confirmTableDrop = async () => {
 		try {
 			await dropTable(tableToBeDeleted!.tableName);
 
 			toast.success('Table deleted successfully', {
-				position: 'bottom-right'
+				position: 'bottom-right',
+				icon: ToastSuccessIcon
 			});
 
 			await loadTables();
@@ -68,9 +66,18 @@
 			});
 		}
 	};
+
+	const handleTableCreated = () => {
+		createTableModalOpen = false;
+		loadTables();
+	};
+
+	onMount(async () => {
+		await loadTables();
+	});
 </script>
 
-<CreateTableModal bind:open={createTableModalOpen} />
+<CreateTableModal bind:open={createTableModalOpen} on:tableCreated={handleTableCreated} />
 
 <ConformationModal bind:open={confirmDeletionModalOpen} on:confirm={confirmTableDrop}>
 	<div slot="prompt">

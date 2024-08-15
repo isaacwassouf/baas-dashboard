@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type ComponentProps } from 'svelte';
+	import { type ComponentProps, createEventDispatcher } from 'svelte';
 	import { Button, Modal, Label, Input, Textarea, Badge } from 'flowbite-svelte';
 	import { Table, TableBody, TableHead, TableHeadCell } from 'flowbite-svelte';
 	import AddColumnItem from '$lib/components/database/add-column-item.svelte';
@@ -8,11 +8,13 @@
 	import { createTable } from '$lib/api/schemas';
 	import '$lib/styles/svelte-select.css';
 	import toast from 'svelte-french-toast';
+	import ToastSuccessIcon from '$lib/components/shared/icons/ToastSuccessIcon.svelte';
 
 	export let open = false;
 	export let size: ComponentProps<Modal>['size'] = 'xl';
 
 	let addingTable: boolean = false;
+	const dispatch = createEventDispatcher();
 
 	let addTableDetails: AddTableDetails = {
 		tableName: '',
@@ -36,21 +38,26 @@
 		});
 	};
 
-	const handleSubmit = (event: Event) => {
+	const handleSubmit = async (event: Event) => {
 		event.preventDefault();
-		console.log($addColumnsStore);
 		addingTable = true;
 		try {
-			createTable({
+			await createTable({
 				tableName: addTableDetails.tableName,
 				tableComment: addTableDetails.tableComment,
 				columns: $addColumnsStore
 			});
 
-			toast.success('Table created successfully');
+			dispatch('tableCreated');
+			toast.success('Table created successfully', {
+				position: 'bottom-right',
+				icon: ToastSuccessIcon
+			});
 		} catch (error) {
 			console.error(error);
-			toast.error('Failed to create table');
+			toast.error('Failed to create table', {
+				position: 'bottom-right'
+			});
 		} finally {
 			addingTable = false;
 		}
