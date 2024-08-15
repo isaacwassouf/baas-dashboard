@@ -273,32 +273,46 @@
 					<TableBodyCell>{columnDetail.columnType}</TableBodyCell>
 					<TableBodyCell>{columnDetail.columnDefault}</TableBodyCell>
 					<TableBodyCell>
-						<Badge
-							color={columnDetail.isNotNullable ? 'green' : 'red'}
-							class="px-2.5 py-0.5"
-							rounded
-						>
-							<Indicator
-								size="xs"
-								color={columnDetail.isNotNullable ? 'green' : 'red'}
-								class="me-1"
-							/>
-							{#if columnDetail.isNotNullable}
+						{#if columnDetail.columnName === 'id'}
+							<Badge color="green" class="px-2.5 py-0.5" rounded>
+								<Indicator size="xs" color="green" class="me-1" />
 								True
-							{:else}
-								False
-							{/if}
-						</Badge>
+							</Badge>
+						{:else}
+							<Badge
+								color={columnDetail.isNotNullable ? 'green' : 'red'}
+								class="px-2.5 py-0.5"
+								rounded
+							>
+								<Indicator
+									size="xs"
+									color={columnDetail.isNotNullable ? 'green' : 'red'}
+									class="me-1"
+								/>
+								{#if columnDetail.isNotNullable}
+									True
+								{:else}
+									False
+								{/if}
+							</Badge>
+						{/if}
 					</TableBodyCell>
 					<TableBodyCell>
-						<Badge color={columnDetail.isUnique ? 'green' : 'red'} class="px-2.5 py-0.5" rounded>
-							<Indicator size="xs" color={columnDetail.isUnique ? 'green' : 'red'} class="me-1" />
-							{#if columnDetail.isUnique}
+						{#if columnDetail.columnName === 'id'}
+							<Badge color="green" class="px-2.5 py-0.5" rounded>
+								<Indicator size="xs" color="green" class="me-1" />
 								True
-							{:else}
-								False
-							{/if}
-						</Badge>
+							</Badge>
+						{:else}
+							<Badge color={columnDetail.isUnique ? 'green' : 'red'} class="px-2.5 py-0.5" rounded>
+								<Indicator size="xs" color={columnDetail.isUnique ? 'green' : 'red'} class="me-1" />
+								{#if columnDetail.isUnique}
+									True
+								{:else}
+									False
+								{/if}
+							</Badge>
+						{/if}
 					</TableBodyCell>
 					<TableBodyCell>
 						{#if columnDetail.columnName === 'id' || columnDetail.columnName === 'created_at' || columnDetail.columnName === 'updated_at'}
