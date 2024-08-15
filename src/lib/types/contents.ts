@@ -6,7 +6,7 @@ export interface TableViewRow {
 }
 
 export interface TableViewResponse {
-  entities: TableViewRow[];
+  data: TableViewRow[];
   page: number;
   perPage: number;
   totalPages: number;

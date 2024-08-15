@@ -36,7 +36,7 @@
 	const loadContent = async () => {
 		try {
 			const result: TableViewResponse | undefined = await listContent(name);
-			tableRows = result?.entities ?? [];
+			tableRows = result?.data ?? [];
 		} catch (error) {
 			console.error(error);
 		} finally {

@@ -3,7 +3,7 @@ import type { TableViewResponse } from '$lib/types/contents';
 
 export const listContent = async (tableName: string): Promise<TableViewResponse | undefined> => {
   try {
-    const response = await API.get<TableViewResponse>(`/api/contents/tables/${tableName}`);
+    const response = await API.post<TableViewResponse>(`/api/contents/tables/${tableName}`);
 
     if (response.status === 200) {
       return response.data;
