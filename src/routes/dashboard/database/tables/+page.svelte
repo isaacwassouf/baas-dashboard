@@ -159,7 +159,7 @@
 		<TableHead class="bg-gray-200">
 			<TableHeadCell>Table name</TableHeadCell>
 			<TableHeadCell>Approx Size (KB)</TableHeadCell>
-			<TableHeadCell>Rows</TableHeadCell>
+			<TableHeadCell>Est. Rows</TableHeadCell>
 			<TableHeadCell>Comment</TableHeadCell>
 			<TableHeadCell>Create Time</TableHeadCell>
 			<TableHeadCell>

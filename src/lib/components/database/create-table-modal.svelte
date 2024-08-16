@@ -124,7 +124,7 @@
 							columnName: 'creator_id',
 							columnType: 'uint64',
 							columnDefault: '',
-							isUnique: true,
+							isUnique: false,
 							isNotNullable: true,
 							columnLength: 0,
 							columnPrecision: 0,
@@ -144,7 +144,7 @@
 							columnType: 'timestamp',
 							columnDefault: 'CURRENT_TIMESTAMP',
 							isUnique: false,
-							isNotNullable: true,
+							isNotNullable: false,
 							columnLength: 0,
 							columnPrecision: 0,
 							columnScale: 0
@@ -159,7 +159,7 @@
 							columnType: 'timestamp',
 							columnDefault: 'CURRENT_TIMESTAMP',
 							isUnique: false,
-							isNotNullable: true,
+							isNotNullable: false,
 							columnLength: 0,
 							columnPrecision: 0,
 							columnScale: 0
