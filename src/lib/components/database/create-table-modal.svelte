@@ -179,6 +179,8 @@
 			>
 		</div>
 
-		<Button type="submit" class="w-full" on:click={handleSubmit}>Create table</Button>
+		<Button type="submit" class="w-full bg-green-500 hover:bg-green-600" on:click={handleSubmit}
+			>Create table</Button
+		>
 	</form>
 </Modal>
